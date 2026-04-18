@@ -1,4 +1,4 @@
-// utils/tokenStorage.js
+// utils/token.js
 
 export const setToken = (token) => {
   localStorage.setItem("memi_token", token);

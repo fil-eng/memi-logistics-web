@@ -1,5 +1,4 @@
 // services/authService.js
-
 import apiClient from "./apiClient";
 
 export const loginUser = (data) =>
@@ -9,4 +8,4 @@ export const registerUser = (data) =>
   apiClient.post("/auth/register", data);
 
 export const getCurrentUser = () =>
-  apiClient.get("/auth/me");
+  apiClient.get("/auth/user");

@@ -1,54 +1,66 @@
 // AuthProvider.jsx
 
 import { createContext, useReducer, useEffect } from "react";
-import { authReducer } from "./authReducer";
+import { authReducer } from "./authReducer"
 import { authInitialState } from "./authInitialState";
 import * as types from "./authTypes";
+
 import { setToken, getToken, removeToken } from "../../utils/tokenStorage";
-import { loginUser, registerUser, getCurrentUser } from "../../services/authService";
+import {
+  loginUser,
+  registerUser,
+  getCurrentUser,
+} from "../../services/authService";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, authInitialState);
-
   // LOGIN
-  const login = async (data) => {
-    dispatch({ type: types.AUTH_START });
-    try {
-      const res = await loginUser(data);
-      setToken(res.data.token);
+ const login = async (payload) => {
+  dispatch({ type: types.AUTH_START });
+  
+  try {
+    const res = await loginUser(payload);
+    setToken(res.data.token);
+    
+    dispatch({
+      type: types.LOGIN_SUCCESS,
+      payload: res.data,
+    });
 
-      dispatch({
-        type: types.LOGIN_SUCCESS,
-        payload: res.data,
-      });
-    } catch (err) {
-      dispatch({
-        type: types.AUTH_FAIL,
-        payload: err.response?.data?.message || "Login failed",
-      });
-    }
-  };
+    return res.data;
+  } catch (err) {
+    dispatch({
+      type: types.AUTH_ERROR,
+      payload: err.response?.data?.message || "Login failed",
+    });
+    throw new Error(err.response?.data?.message || "Login failed");
+  }
+};
 
   // REGISTER
-  const register = async (data) => {
-    dispatch({ type: types.AUTH_START });
-    try {
-      const res = await registerUser(data);
-      setToken(res.data.token);
+ const register = async (payload) => {
+  dispatch({ type: types.AUTH_START });
 
-      dispatch({
-        type: types.REGISTER_SUCCESS,
-        payload: res.data,
-      });
-    } catch (err) {
-      dispatch({
-        type: types.AUTH_FAIL,
-        payload: err.response?.data?.message || "Registration failed",
-      });
-    }
-  };
+  try {
+    const res = await registerUser(payload);
+    setToken(res.data.token);
+
+    dispatch({
+      type: types.REGISTER_SUCCESS,
+      payload: res.data,
+    });
+
+    return res.data;
+  } catch (err) {
+    dispatch({
+      type: types.AUTH_ERROR,
+      payload: err.response?.data?.message || "Registration failed",
+    });
+    throw new Error(err.response?.data?.message || "Registration failed");
+  }
+};
 
   // LOGOUT
   const logout = () => {
@@ -58,14 +70,15 @@ export const AuthProvider = ({ children }) => {
 
   // RESTORE SESSION
   useEffect(() => {
-    const loadUser = async () => {
+    const restore = async () => {
       const token = getToken();
       if (!token) return;
 
       try {
         const res = await getCurrentUser();
+
         dispatch({
-          type: types.LOAD_USER,
+          type: types.LOAD_USER_SUCCESS,
           payload: res.data.user,
         });
       } catch {
@@ -74,11 +87,19 @@ export const AuthProvider = ({ children }) => {
       }
     };
 
-    loadUser();
+    restore();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ state, login, register, logout }}>
+    <AuthContext.Provider
+      value={{
+        ...state,
+        login,
+        register,
+        logout,
+        dispatch,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

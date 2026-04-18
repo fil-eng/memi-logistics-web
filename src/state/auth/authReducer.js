@@ -1,54 +1,45 @@
-// authReducer.js
+// auth.reducer.js
 
-import {
-  AUTH_START,
-  LOGIN_SUCCESS,
-  REGISTER_SUCCESS,
-  AUTH_FAIL,
-  LOGOUT,
-  LOAD_USER,
-  CLEAR_MESSAGES,
-} from "./authTypes";
+import * as types from "./authTypes";
 
 export const authReducer = (state, action) => {
   switch (action.type) {
-    case AUTH_START:
+    case types.AUTH_START:
       return {
         ...state,
         loading: true,
         error: null,
-        successMessage: null,
+        success: null,
       };
 
-    case LOGIN_SUCCESS:
-    case REGISTER_SUCCESS:
+    case types.LOGIN_SUCCESS:
+    case types.REGISTER_SUCCESS:
       return {
         ...state,
         loading: false,
         user: action.payload.user,
         token: action.payload.token,
         isAuthenticated: true,
-        error: null,
       };
 
-    case LOAD_USER:
+    case types.LOAD_USER_SUCCESS:
       return {
         ...state,
         user: action.payload,
         isAuthenticated: true,
       };
 
-    case AUTH_FAIL:
+    case types.AUTH_ERROR:
       return {
         ...state,
         loading: false,
         error: action.payload,
-        isAuthenticated: false,
         user: null,
         token: null,
+        isAuthenticated: false,
       };
 
-    case LOGOUT:
+    case types.LOGOUT:
       return {
         ...state,
         user: null,
@@ -56,11 +47,11 @@ export const authReducer = (state, action) => {
         isAuthenticated: false,
       };
 
-    case CLEAR_MESSAGES:
+    case types.CLEAR_FEEDBACK:
       return {
         ...state,
         error: null,
-        successMessage: null,
+        success: null,
       };
 
     default:
