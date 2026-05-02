@@ -16,7 +16,6 @@ const Home = () => {
               Connect shippers, carriers, and logistics partners in one trusted
               platform that makes transport faster, clearer, and more reliable.
             </p>
-
             <div className={styles.actions}>
               <Link className={styles.primaryBtn} to="/register">
                 Get Started
@@ -101,10 +100,8 @@ const Home = () => {
             </Link>
           </div>
         </section>
-        <footer>
-          <Footer />
-        </footer>
       </div>
+      <Footer />
     </>
   );
 };

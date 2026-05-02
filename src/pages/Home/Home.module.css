@@ -1,6 +1,6 @@
 .wrapper {
   min-height: 100vh;
-  background: #f5f7fb;
+  background: #3370e9;
   color: #271511;
 }
 
@@ -116,7 +116,7 @@
 
 .ctaText {
   margin: 0 auto 24px;
-  color: #4b5563;
+  color: #e2e6eb;
   line-height: 1.6;
   font-size: 15px;
   max-width: 680px;

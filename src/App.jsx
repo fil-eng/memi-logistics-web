@@ -4,6 +4,8 @@ import ProtectedRoute from "./components/routing/ProtectedRoute";
 
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
+import ShipperRegister from "./pages/Register/ShipperRegister";
+import CarrierRegister from "./pages/Register/CarrierRegister";
 import ShipperDashboard from "./pages/ShipShipperDashboard/ShipShipperDashboard";
 import CarrierDashboard from "./pages/CarrierDashboard/CarrierDashboard";
 import Home from "./pages/Home/Home";
@@ -18,6 +20,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/register/shipper" element={<ShipperRegister />} />
+          <Route path="/register/carrier" element={<CarrierRegister />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
 
           <Route

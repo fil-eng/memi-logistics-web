@@ -26,6 +26,9 @@ const Navbar = () => {
         <nav className={styles.nav}>
           {!isAuthenticated ? (
             <>
+              <Link to="/" className={styles.link}>
+                Home
+              </Link>
               <Link to="/login" className={styles.link}>
                 Login
               </Link>

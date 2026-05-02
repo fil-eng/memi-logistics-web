@@ -24,10 +24,17 @@
 }
 
 .subtitle {
-  margin: 0 0 24px;
+  margin: 0 0 8px;
   color: #6b7280;
   font-size: 14px;
   line-height: 1.5;
+}
+
+.description {
+  margin: 0 0 24px;
+  color: #6b7280;
+  font-size: 12px;
+  line-height: 1.4;
 }
 
 .form {
@@ -99,6 +106,10 @@
   text-decoration: none;
 }
 
+.link:hover {
+  text-decoration: underline;
+}
+
 /* Responsive enhancements for larger screens */
 @media (min-width: 768px) {
   .wrapper {
@@ -129,19 +140,5 @@
   .button {
     padding: 16px 18px;
     font-size: 18px;
-  }
-}
-
-.link:hover {
-  text-decoration: underline;
-}
-
-@media (min-width: 768px) {
-  .card {
-    padding: 32px;
-  }
-
-  .title {
-    font-size: 32px;
   }
 }

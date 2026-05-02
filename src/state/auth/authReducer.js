@@ -1,57 +1,101 @@
 // auth.reducer.js
 
-import * as types from "./authTypes";
+import * as types from "./auth.types";
 
 export const authReducer = (state, action) => {
   switch (action.type) {
     case types.AUTH_START:
       return {
         ...state,
-        loading: true,
-        error: null,
-        success: null,
+        isLoading: true,
+        errorMessage: null,
+        successMessage: null,
       };
 
     case types.LOGIN_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        user: action.payload.user,
+        accessToken: action.payload.token,
+        role: action.payload.user?.role || null,
+        isAuthenticated: true,
+        isInitialized: true,
+        errorMessage: null,
+        successMessage: "Login successful",
+      };
+
     case types.REGISTER_SUCCESS:
       return {
         ...state,
-        loading: false,
+        isLoading: false,
         user: action.payload.user,
-        token: action.payload.token,
+        accessToken: action.payload.token,
+        role: action.payload.user?.role || null,
         isAuthenticated: true,
+        isInitialized: true,
+        errorMessage: null,
+        successMessage: "Registration successful",
       };
 
-    case types.LOAD_USER_SUCCESS:
+    case types.REFRESH_TOKEN_SUCCESS:
       return {
         ...state,
+        isLoading: false,
+        accessToken: action.payload.token,
+        isAuthenticated: true,
+        errorMessage: null,
+      };
+
+    case types.LOAD_CURRENT_USER:
+      return {
+        ...state,
+        isLoading: false,
         user: action.payload,
+        role: action.payload?.role || null,
         isAuthenticated: true,
+        isInitialized: true,
+        errorMessage: null,
       };
 
-    case types.AUTH_ERROR:
+    case types.AUTH_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: action.payload,
+        isLoading: false,
+        isInitialized: true,
+        errorMessage: action.payload,
+        successMessage: null,
         user: null,
-        token: null,
+        accessToken: null,
+        role: null,
         isAuthenticated: false,
       };
 
     case types.LOGOUT:
       return {
         ...state,
+        isLoading: false,
+        isInitialized: true,
+        errorMessage: null,
+        successMessage: null,
         user: null,
-        token: null,
+        accessToken: null,
+        role: null,
         isAuthenticated: false,
       };
 
-    case types.CLEAR_FEEDBACK:
+    case types.CLEAR_MESSAGES:
       return {
         ...state,
-        error: null,
-        success: null,
+        errorMessage: null,
+        successMessage: null,
+      };
+
+    case types.AUTH_READY:
+      return {
+        ...state,
+        isInitialized: true,
+        isLoading: false,
       };
 
     default:

@@ -4,8 +4,10 @@ export const AUTH_START = "AUTH_START";
 
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
+export const REFRESH_SUCCESS = "REFRESH_SUCCESS";
 
 export const LOAD_USER_SUCCESS = "LOAD_USER_SUCCESS";
+export const AUTH_READY = "AUTH_READY";
 
 export const AUTH_ERROR = "AUTH_ERROR";
 

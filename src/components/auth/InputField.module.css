@@ -1,0 +1,41 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  font-size: 16px;
+  background: #fff;
+  outline: none;
+}
+
+.input:focus {
+  border-color: #2563eb;
+}
+
+.inputError {
+  border-color: #dc2626;
+}
+
+.helper {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.error {
+  margin: 0;
+  color: #dc2626;
+  font-size: 13px;
+}

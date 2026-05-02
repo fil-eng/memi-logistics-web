@@ -3,7 +3,9 @@
 export const authInitialState = {
   user: null,
   token: null,
+  role: null,
   isAuthenticated: false,
+  isInitialized: false,
 
   loading: false,
 
