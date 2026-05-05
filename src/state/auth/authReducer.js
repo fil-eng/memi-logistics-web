@@ -17,7 +17,8 @@ export const authReducer = (state, action) => {
         ...state,
         isLoading: false,
         user: action.payload.user,
-        accessToken: action.payload.token,
+        accessToken: action.payload.accessToken,
+        refreshToken: action.payload.refreshToken,
         role: action.payload.user?.role || null,
         isAuthenticated: true,
         isInitialized: true,
@@ -30,7 +31,8 @@ export const authReducer = (state, action) => {
         ...state,
         isLoading: false,
         user: action.payload.user,
-        accessToken: action.payload.token,
+        accessToken: action.payload.accessToken,
+        refreshToken: action.payload.refreshToken,
         role: action.payload.user?.role || null,
         isAuthenticated: true,
         isInitialized: true,
@@ -42,17 +44,20 @@ export const authReducer = (state, action) => {
       return {
         ...state,
         isLoading: false,
-        accessToken: action.payload.token,
+        accessToken: action.payload.accessToken,
+        refreshToken: action.payload.refreshToken || state.refreshToken,
         isAuthenticated: true,
         errorMessage: null,
       };
 
-    case types.LOAD_CURRENT_USER:
+    case types.SESSION_RESTORE_SUCCESS:
       return {
         ...state,
         isLoading: false,
-        user: action.payload,
-        role: action.payload?.role || null,
+        user: action.payload.user,
+        accessToken: action.payload.accessToken,
+        refreshToken: action.payload.refreshToken,
+        role: action.payload.user?.role || null,
         isAuthenticated: true,
         isInitialized: true,
         errorMessage: null,
@@ -67,6 +72,7 @@ export const authReducer = (state, action) => {
         successMessage: null,
         user: null,
         accessToken: null,
+        refreshToken: null,
         role: null,
         isAuthenticated: false,
       };
@@ -80,11 +86,12 @@ export const authReducer = (state, action) => {
         successMessage: null,
         user: null,
         accessToken: null,
+        refreshToken: null,
         role: null,
         isAuthenticated: false,
       };
 
-    case types.CLEAR_MESSAGES:
+    case types.CLEAR_FEEDBACK:
       return {
         ...state,
         errorMessage: null,

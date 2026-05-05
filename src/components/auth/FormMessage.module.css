@@ -1,16 +1,16 @@
 .message {
   margin: 0;
-  padding: 12px 14px;
-  border-radius: 12px;
+  /* padding: 12px 14px; */
+  /* border-radius: 12px; */
   font-size: 14px;
 }
 
 .error {
   color: #b91c1c;
-  background: #fee2e2;
+  /* background: #fee2e2; */
 }
 
 .success {
   color: #065f46;
-  background: #d1fae5;
+  /* background: #d1fae5; */
 }

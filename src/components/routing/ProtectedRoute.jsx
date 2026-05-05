@@ -5,7 +5,18 @@ const ProtectedRoute = ({ children, roles }) => {
   const { isAuthenticated, user, isInitialized } = useAuth();
 
   if (!isInitialized) {
-    return null;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <div>Loading...</div>
+      </div>
+    );
   }
 
   if (!isAuthenticated) {

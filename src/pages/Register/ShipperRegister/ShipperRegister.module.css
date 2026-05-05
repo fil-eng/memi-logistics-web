@@ -4,7 +4,9 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: #f5f7fb;
+  background: linear-gradient(50deg, rgb(8, 55, 208), #1facc1);
+background: linear-gradient( rgb(9, 115, 236), rgb(244, 247, 248));
+
 }
 
 .card {
@@ -14,6 +16,11 @@
   border-radius: 20px;
   padding: 24px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  /* background: #f4ab36; */
+  /* background-color: transparent; */
+  /* opacity: 0.5; */
+  background-color: rgba(255, 255, 255, 0.5);
+
 }
 
 .title {
@@ -21,11 +28,12 @@
   font-weight: 700;
   margin: 0 0 8px;
   color: #111827;
+  margin-bottom: 25px;
 }
 
 .subtitle {
   margin: 0 0 8px;
-  color: #6b7280;
+  color: #555b67;
   font-size: 14px;
   line-height: 1.5;
 }

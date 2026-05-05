@@ -5,9 +5,9 @@
 }
 
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #4667ed;
+  --text: #251ef0;
+  --text-h: black;
+  --bg: #3370E9;
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
   --accent: #aa3bff;
@@ -39,7 +39,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --text: #9ca3af;
-    --text-h: #f3f4f6;
+    --text-h: #031029;
     --bg: #16171d;
     --border: #2e303a;
     --code-bg: #1f2028;
@@ -58,7 +58,7 @@
 
 body {
   margin: 0;
-  background-color: blue !important;
+  /* background-color: blue !important; */
 }
 
 #root {
@@ -102,5 +102,5 @@ a {
   text-decoration: none;
 }
 a:hover {
-  color: blue;
+  color: orange;
 }

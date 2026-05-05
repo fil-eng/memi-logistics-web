@@ -1,10 +1,6 @@
 // services/apiClient.js
 import axios from "axios";
-import {
-  getAccessToken,
-  setAccessToken,
-  removeAccessToken,
-} from "../utils/token";
+import { getAccessToken } from "../utils/token";
 
 const baseURL = "http://localhost:8080/api";
 
@@ -57,25 +53,28 @@ apiClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
+        const refreshToken = getRefreshToken();
+        if (!refreshToken) {
+          throw new Error("No refresh token available");
+        }
+
         const refreshResponse = await axios.post(
           `${baseURL}/auth/refresh`,
-          null,
+          { refreshToken },
           { withCredentials: true },
         );
 
-        const newToken = refreshResponse.data?.token;
+        const { accessToken } = refreshResponse.data;
 
-        if (newToken) {
-          setAccessToken(newToken);
-          processQueue(null, newToken);
-          originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        if (accessToken) {
+          processQueue(null, accessToken);
+          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
           return apiClient(originalRequest);
         }
 
         throw new Error("Refresh failed");
       } catch (refreshError) {
         processQueue(refreshError, null);
-        removeAccessToken();
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

@@ -1,0 +1,67 @@
+.page {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.headerRow {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.badge {
+  display: inline-flex;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--text-h);
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  padding: 1.25rem;
+  border-radius: 24px;
+  background: white;
+  box-shadow: var(--shadow-soft);
+}
+
+h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+  color: var(--text-h);
+}
+
+.smallLabel,
+.meta {
+  margin: 0;
+  color: var(--text);
+}
+
+.route {
+  margin: 0;
+  color: var(--text-h);
+  font-weight: 700;
+}
+
+.route {
+  font-weight: 700;
+}
+
+.empty {
+  padding: 1.75rem;
+  text-align: center;
+  background: white;
+  border-radius: 24px;
+  box-shadow: var(--shadow-soft);
+  color: var(--text-h);
+}

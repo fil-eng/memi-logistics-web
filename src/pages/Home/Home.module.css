@@ -2,11 +2,12 @@
   min-height: 100vh;
   background: #3370e9;
   color: #271511;
+  background: linear-gradient( rgb(9, 115, 236), rgb(244, 247, 248));
 }
 
 .hero {
   padding: 24px 20px 12px;
-  background: linear-gradient(180deg, #ffffff 0%, #f5f7fb 100%);
+  /* background: linear-gradient(180deg, #ffffff 0%, #f5f7fb 100%); */
 }
 
 .heroContent {
@@ -35,16 +36,18 @@
 .subtitle {
   font-size: 16px;
   line-height: 1.6;
-  color: #4b5563;
+  color: white;
   margin: 0 auto 24px;
   max-width: 680px;
 }
 
 .actions {
+  width: 50%;
   display: flex;
   flex-direction: column;
   gap: 12px;
   justify-content: center;
+  margin: 0 auto;
 }
 
 .primaryBtn,
@@ -86,7 +89,6 @@
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr;
   gap: 16px;
 }
 
@@ -141,6 +143,7 @@
 
   .grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    /* max-width: 100%; */
   }
 
   .section,

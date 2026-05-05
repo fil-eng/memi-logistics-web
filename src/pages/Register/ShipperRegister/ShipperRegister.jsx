@@ -1,4 +1,4 @@
-import RegistrationForm from "../../components/auth/RegistrationForm";
+import RegistrationForm from "../RegistrationForm/RegistrationForm";
 import styles from "./ShipperRegister.module.css";
 
 const ShipperRegister = () => {
@@ -7,10 +7,8 @@ const ShipperRegister = () => {
       <div className={styles.card}>
         <h1 className={styles.title}>Register as Shipper</h1>
         <p className={styles.subtitle}>
-          Set up your shipper account to create and manage shipment requests.
-        </p>
-        <p className={styles.description}>
-          Perfect for businesses sending freight and managing pickup requests.
+          Create your shipper account to manage shipment requests and connect
+          with carriers.
         </p>
         <RegistrationForm role="SHIPPER" />
       </div>

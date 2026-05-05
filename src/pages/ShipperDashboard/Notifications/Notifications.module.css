@@ -1,0 +1,60 @@
+.page {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.headerRow {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.badge {
+  display: inline-flex;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--text-h);
+}
+
+.list {
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  padding: 1.25rem;
+  background: white;
+  border-radius: 24px;
+  box-shadow: var(--shadow-soft);
+}
+
+h2 {
+  margin: 0 0 0.5rem;
+  color: var(--text-h);
+}
+
+p {
+  margin: 0 0 0.75rem;
+  color: var(--text);
+}
+
+time {
+  color: #475569;
+  font-size: 0.92rem;
+}
+
+.empty {
+  padding: 1.75rem;
+  border-radius: 24px;
+  background: white;
+  box-shadow: var(--shadow-soft);
+  text-align: center;
+  color: var(--text-h);
+}

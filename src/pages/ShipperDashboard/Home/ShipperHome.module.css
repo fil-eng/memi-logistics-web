@@ -1,0 +1,126 @@
+.homePage {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.heroCard {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  border-radius: 24px;
+  background: white;
+  box-shadow: var(--shadow-soft);
+  color: var(--text-h);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  background: rgb(108, 244, 181);
+  color: black;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.heading {
+  margin: 0.75rem 0 0.75rem;
+  font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+  line-height: 1.05;
+}
+
+.subtitle {
+  margin: 0 auto;
+  max-width: 680px;
+  color: rgb(2, 2, 20);
+  line-height: 1.7;
+  text-align: center;
+  /* background-color: red; */
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.primaryButton,
+.secondaryButton {
+  min-width: 180px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.95rem 1rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 700;
+  text-align: center;
+  color: black;
+}
+
+.primaryButton {
+  background: rgb(240, 203, 135);
+}
+
+.secondaryButton {
+  background: rgb(136, 193, 243);
+}
+.primaryButton:hover,
+.secondaryButton:hover {
+  color: white;
+  background-color: rgb(40, 159, 244);
+}
+.section {
+  display: grid;
+  gap: 1rem;
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.sectionHeader h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: white;
+}
+
+.sectionHeader p {
+  margin: 0;
+  color: var(--text);
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.infoCard {
+  padding: 1.25rem;
+  border-radius: 20px;
+  background: rgb(228, 217, 217);
+  box-shadow: var(--shadow-soft);
+  color: var(--text-h);
+}
+
+.infoCard h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1.05rem;
+}
+
+.infoCard p {
+  margin: 0;
+  color: rgb(21, 16, 16);
+  line-height: 1.7;
+}
+
+@media (min-width: 840px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

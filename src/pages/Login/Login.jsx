@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link, Links } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../state/auth/useAuth";
 import { validateLoginForm } from "../../utils/authValidators";
 import Button from "../../components/auth/Button";
 import FormMessage from "../../components/auth/FormMessage";
 import InputField from "../../components/auth/InputField";
+import PasswordField from "../../components/auth/PasswordField";
 import styles from "./Login.module.css";
 
 const Login = () => {
-  const { login, isAuthenticated, role } = useAuth();
+  const { login, state, dispatch } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -17,40 +18,37 @@ const Login = () => {
   });
 
   const [errors, setErrors] = useState({});
-  const [submitError, setSubmitError] = useState("");
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (state.isAuthenticated) {
       const destination =
-        role === "CARRIER"
+        state.role === "CARRIER"
           ? "/carrier/dashboard"
-          : role === "SHIPPER"
+          : state.role === "SHIPPER"
             ? "/shipper/dashboard"
             : "/";
       navigate(destination, { replace: true });
     }
-  }, [isAuthenticated, role, navigate]);
+  }, [state.isAuthenticated, state.role, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     const updatedForm = { ...form, [name]: value };
     setForm(updatedForm);
     setErrors(validateLoginForm(updatedForm));
-    setSubmitError("");
+    if (state.errorMessage) {
+      dispatch({ type: "CLEAR_FEEDBACK" });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateLoginForm(form);
     setErrors(validationErrors);
-    setSubmitError("");
 
     if (Object.keys(validationErrors).length > 0) {
       return;
     }
-
-    setLoading(true);
 
     try {
       const result = await login({
@@ -66,9 +64,7 @@ const Login = () => {
             : "/";
       navigate(destination, { replace: true });
     } catch (err) {
-      setSubmitError(err?.message || "Login failed. Please try again.");
-    } finally {
-      setLoading(false);
+      // Error is handled by provider
     }
   };
 
@@ -83,7 +79,7 @@ const Login = () => {
 
         <form className={styles.form} onSubmit={handleSubmit} noValidate>
           <InputField
-            label="Email"
+            // label="Email"
             id="email"
             name="email"
             type="email"
@@ -94,11 +90,10 @@ const Login = () => {
             error={errors.email}
           />
 
-          <InputField
-            label="Password"
+          <PasswordField
+            // label="Password"
             id="password"
             name="password"
-            type="password"
             value={form.password}
             onChange={handleChange}
             placeholder="Enter your password"
@@ -106,12 +101,14 @@ const Login = () => {
             error={errors.password}
           />
 
-          {submitError && <FormMessage message={submitError} type="error" />}
+          {state.errorMessage && (
+            <FormMessage message={state.errorMessage} type="error" />
+          )}
 
           <Button
             type="submit"
-            loading={loading}
-            disabled={loading || Object.keys(errors).length > 0}
+            loading={state.isLoading}
+            disabled={state.isLoading || Object.keys(errors).length > 0}
           >
             Login
           </Button>

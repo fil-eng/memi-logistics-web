@@ -1,4 +1,4 @@
-import RegistrationForm from "../../components/auth/RegistrationForm";
+import RegistrationForm from "../RegistrationForm/RegistrationForm";
 import styles from "./CarrierRegister.module.css";
 
 const CarrierRegister = () => {
@@ -7,13 +7,9 @@ const CarrierRegister = () => {
       <div className={styles.card}>
         <h1 className={styles.title}>Register as Carrier</h1>
         <p className={styles.subtitle}>
-          Create a carrier profile to find loads and handle deliveries.
+          Create your carrier account to find loads and handle deliveries.
         </p>
-        <p className={styles.description}>
-          Ideal for carriers that move goods and want reliable load
-          opportunities.
-        </p>
-        <RegistrationForm role="CARRIER" />
+        <RegistrationForm role="CARRIER"/>
       </div>
     </div>
   );

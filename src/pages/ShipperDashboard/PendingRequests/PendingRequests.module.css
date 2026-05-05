@@ -1,0 +1,71 @@
+.page {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.headerRow {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.badge {
+  display: inline-flex;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  margin: 0;
+  color: white;
+}
+
+.list {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  justify-content: center;
+  place-items: center;
+}
+
+.card {
+  padding: 1.25rem;
+  background: white;
+  border-radius: 22px;
+  box-shadow: var(--shadow-soft);
+  display: grid;
+  gap: 0.5rem;
+  max-width: 300px;
+}
+
+.card h2 {
+  margin: 0;
+  font-size: 1rem;
+  /* color: white; */
+}
+
+.smallLabel,
+.meta {
+  margin: 0;
+  color: var(--text);
+}
+
+.details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  color: var(--text-h);
+  font-weight: 700;
+}
+
+.empty {
+  padding: 1.75rem;
+  background: white;
+  border-radius: 24px;
+  box-shadow: var(--shadow-soft);
+  text-align: center;
+  color: var(--text-h);
+}

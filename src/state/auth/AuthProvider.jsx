@@ -8,14 +8,16 @@ import * as types from "./auth.types";
 import {
   setAccessToken,
   getAccessToken,
-  removeAccessToken,
   clearAuthStorage,
+  setRefreshToken,
+  getRefreshToken,
+  isTokenExpired,
 } from "../../utils/token";
 import {
   loginUser,
   registerUser,
   getCurrentUser,
-  refreshUserToken,
+  refreshToken as refreshTokenService,
 } from "../../services/authService";
 
 export const AuthContext = createContext();
@@ -29,14 +31,16 @@ export const AuthProvider = ({ children }) => {
 
     try {
       const res = await loginUser(payload);
-      setAccessToken(res.data.token);
+      const { accessToken, refreshToken } = res;
+      setAccessToken(accessToken);
+      setRefreshToken(refreshToken);
 
       dispatch({
         type: types.LOGIN_SUCCESS,
-        payload: res.data,
+        payload: res,
       });
 
-      return res.data;
+      return res;
     } catch (err) {
       dispatch({
         type: types.AUTH_FAILURE,
@@ -52,14 +56,16 @@ export const AuthProvider = ({ children }) => {
 
     try {
       const res = await registerUser(payload);
-      setAccessToken(res.data.token);
+      const { accessToken, refreshToken } = res;
+      setAccessToken(accessToken);
+      setRefreshToken(refreshToken);
 
       dispatch({
         type: types.REGISTER_SUCCESS,
-        payload: res.data,
+        payload: res,
       });
 
-      return res.data;
+      return res;
     } catch (err) {
       dispatch({
         type: types.AUTH_FAILURE,
@@ -70,47 +76,29 @@ export const AuthProvider = ({ children }) => {
   };
 
   // REFRESH TOKEN
-  const refreshToken = async () => {
+  const refreshToken = async (refreshTokenValue) => {
     dispatch({ type: types.AUTH_START });
 
     try {
-      const res = await refreshUserToken();
-      setAccessToken(res.data.token);
+      const res = await refreshTokenService(refreshTokenValue);
+      const { accessToken, refreshToken: newRefreshToken } = res;
+      setAccessToken(accessToken);
+      if (newRefreshToken) {
+        setRefreshToken(newRefreshToken);
+      }
 
       dispatch({
         type: types.REFRESH_TOKEN_SUCCESS,
-        payload: res.data,
+        payload: res,
       });
 
-      return res.data;
+      return res;
     } catch (err) {
       dispatch({
         type: types.AUTH_FAILURE,
         payload: err.response?.data?.message || "Refresh failed",
       });
       throw new Error(err.response?.data?.message || "Refresh failed");
-    }
-  };
-
-  // LOAD CURRENT USER
-  const loadCurrentUser = async () => {
-    dispatch({ type: types.AUTH_START });
-
-    try {
-      const res = await getCurrentUser();
-
-      dispatch({
-        type: types.LOAD_CURRENT_USER,
-        payload: res.data.user,
-      });
-
-      return res.data.user;
-    } catch (err) {
-      dispatch({
-        type: types.AUTH_FAILURE,
-        payload: err.response?.data?.message || "Failed to load user",
-      });
-      throw new Error(err.response?.data?.message || "Failed to load user");
     }
   };
 
@@ -122,23 +110,83 @@ export const AuthProvider = ({ children }) => {
 
   // RESTORE SESSION
   useEffect(() => {
-    const restore = async () => {
-      const token = getAccessToken();
-      if (!token) {
-        dispatch({ type: types.AUTH_READY });
-        return;
-      }
+    const timeout = setTimeout(() => {
+      dispatch({ type: types.AUTH_READY });
+    }, 2000); // 2 second timeout
 
+    const restore = async () => {
       try {
-        await loadCurrentUser();
-      } catch {
-        try {
-          await refreshToken();
-          await loadCurrentUser();
-        } catch {
-          clearAuthStorage();
-          dispatch({ type: types.LOGOUT });
+        const accessToken = getAccessToken();
+        const refreshToken = getRefreshToken();
+
+        if (accessToken && !isTokenExpired(accessToken)) {
+          // Access token is valid, restore session
+          try {
+            const userRes = await getCurrentUser();
+            const user = userRes;
+            dispatch({
+              type: types.SESSION_RESTORE_SUCCESS,
+              payload: {
+                user,
+                accessToken,
+                refreshToken,
+              },
+            });
+          } catch (err) {
+            // If getCurrentUser fails, try refresh
+            if (refreshToken) {
+              try {
+                const refreshRes = await refreshTokenService(refreshToken);
+                const { accessToken: newAccess, refreshToken: newRefresh } =
+                  refreshRes;
+                setAccessToken(newAccess);
+                if (newRefresh) setRefreshToken(newRefresh);
+                const userRes = await getCurrentUser();
+                const user = userRes;
+                dispatch({
+                  type: types.SESSION_RESTORE_SUCCESS,
+                  payload: {
+                    user,
+                    accessToken: newAccess,
+                    refreshToken: newRefresh || refreshToken,
+                  },
+                });
+              } catch {
+                clearAuthStorage();
+                dispatch({ type: types.LOGOUT });
+              }
+            } else {
+              clearAuthStorage();
+              dispatch({ type: types.LOGOUT });
+            }
+          }
+        } else if (refreshToken) {
+          // Access token expired or missing, use refresh token
+          try {
+            const refreshRes = await refreshTokenService(refreshToken);
+            const { accessToken: newAccess, refreshToken: newRefresh } =
+              refreshRes;
+            setAccessToken(newAccess);
+            if (newRefresh) setRefreshToken(newRefresh);
+            const userRes = await getCurrentUser();
+            const user = userRes;
+            dispatch({
+              type: types.SESSION_RESTORE_SUCCESS,
+              payload: {
+                user,
+                accessToken: newAccess,
+                refreshToken: newRefresh || refreshToken,
+              },
+            });
+          } catch {
+            clearAuthStorage();
+            dispatch({ type: types.LOGOUT });
+          }
+        } else {
+          dispatch({ type: types.AUTH_READY });
         }
+      } finally {
+        clearTimeout(timeout);
       }
     };
 
@@ -148,11 +196,13 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
+        // expose both the raw `state` and top-level shortcuts for
+        // existing consumers that destructure fields directly.
         ...state,
+        state,
         login,
         register,
         refreshToken,
-        loadCurrentUser,
         logout,
         dispatch,
       }}

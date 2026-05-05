@@ -1,0 +1,50 @@
+.section {
+  display: grid;
+  gap: 1rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.2rem;
+  border-radius: 24px;
+  background: white;
+  box-shadow: var(--shadow-soft);
+  color: var(--text-h);
+}
+
+.icon {
+  font-size: 1.65rem;
+  color: var(--primary);
+}
+
+.content {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.label {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.value {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-h);
+}
+
+@media (min-width: 720px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

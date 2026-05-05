@@ -1,0 +1,191 @@
+.createPage {
+  display: grid;
+  gap: 0.5rem;
+  /* background-color: red; */
+  margin-top: -20px;
+  
+}
+
+.headerRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: white;
+  font-size: 0.2rem;
+  font-weight: 700;
+}
+
+.title {
+  margin: 0.75rem 0 0;
+  font-size: clamp(1.6rem, 2.2vw, 2rem);
+  color: white;
+}
+
+.card {
+  background: white;
+  border-radius: 24px;
+  box-shadow: var(--shadow-soft);
+  padding: 0.5rem 1.5rem;
+}
+
+.form {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.65rem;
+  font-size: 0.94rem;
+  color: var(--text-h);
+  
+}
+.safe_option{
+  text-align: start;
+}
+.field span {
+  font-weight: 700;
+  color: var(--text-h);
+}
+
+.field input,
+.field select {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 18px;
+  border: 1px solid #c8d2e0;
+  background: #f8fbff;
+  color: var(--text-h);
+  outline: none;
+}
+
+.field input::placeholder,
+.field select::placeholder {
+  color: rgba(15, 23, 42, 0.55);
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
+}
+
+.inlineInput {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  gap: 0.75rem;
+}
+
+.optionRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  max-width:250px;
+  /* margin: 0 auto; */
+  justify-content: center;
+  align-items: center;
+}
+label span{
+  text-align: start;
+}
+.optionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  gap: 0.5rem;
+  border: 1px solid #c8d2e0;
+  border-radius: 16px;
+  background: #c0c4bc;
+  color: var(--text-h);
+  cursor: pointer;
+  font-weight: 700;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+  position: relative;
+}
+
+.optionButton input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.optionSelected {
+  border-color: green;
+  background: green;
+  color: white;
+}
+
+.optionSelected_Fragile{
+  background-color: red;
+}
+small {
+  color: rgb(243, 87, 87);
+}
+
+.success {
+  padding: 1rem;
+  border-radius: 18px;
+  background: var(--success-soft);
+  color: var(--success);
+  font-weight: 700;
+  margin: 0;
+}
+
+.submitButton {
+  /* width: 30%; */
+  padding: .5rem 1.15rem;
+  border: none;
+  border-radius: 999px;
+  background: rgb(51, 120, 231);
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+  margin: 0 auto;
+}
+
+@media (min-width: 720px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .inlineInput {
+    grid-template-columns: 1fr 160px;
+  }
+  .card {
+    max-width: 980px;
+    margin: 5px auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .card {
+    padding: 1.25rem;
+  }
+
+  .inlineInput {
+    grid-template-columns: 1fr;
+  }
+
+  .optionRow {
+    grid-template-columns: 1fr;
+  }
+}
