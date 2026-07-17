@@ -11,16 +11,16 @@ const ShipperHome = () => {
   const { shipments } = shipmentState;
 
   const activeShipments = shipments.filter(
-    (item) => item.status !== "delivered",
+    (item) => item.status !== "COMPLETED",
   ).length;
   const pendingRequests = shipments.filter(
-    (item) => item.status === "pending",
+    (item) => item.status === "PENDING",
   ).length;
   const completedDeliveries = shipments.filter(
-    (item) => item.status === "delivered",
+    (item) => item.status === "COMPLETED",
   ).length;
   const alerts = shipments.filter(
-    (item) => item.status === "delayed" || item.status === "alert",
+    (item) => item.status === "DELAYED" || item.status === "ALERT",
   ).length;
 
   return (
@@ -38,10 +38,13 @@ const ShipperHome = () => {
         </div>
 
         <div className={styles.heroActions}>
-          <Link className={styles.primaryButton} to="create-shipment">
+          <Link className={styles.primaryButton} to="/shipper/create-shipment">
             Create Shipment
           </Link>
-          <Link className={styles.secondaryButton} to="active-shipments">
+          <Link
+            className={styles.secondaryButton}
+            to="/shipper/active-shipments"
+          >
             View Active Shipments
           </Link>
         </div>
@@ -57,7 +60,6 @@ const ShipperHome = () => {
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2>Quick overview</h2>
-          
         </div>
 
         <div className={styles.grid}>

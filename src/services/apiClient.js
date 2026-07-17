@@ -1,9 +1,14 @@
 // services/apiClient.js
 import axios from "axios";
-import { getAccessToken } from "../utils/token";
+import {
+  getAccessToken,
+  getRefreshToken,
+  setAccessToken,
+  setRefreshToken,
+  clearAuthStorage,
+} from "../utils/token";
 
-const baseURL = "http://localhost:8080/api";
-
+const baseURL = import.meta.env.VITE_API_URL_BASEURL;;
 const apiClient = axios.create({
   baseURL,
   withCredentials: true,
@@ -64,20 +69,47 @@ apiClient.interceptors.response.use(
           { withCredentials: true },
         );
 
-        const { accessToken } = refreshResponse.data;
+        const { accessToken, refreshToken: newRefreshToken } =
+          refreshResponse.data;
 
-        if (accessToken) {
-          processQueue(null, accessToken);
-          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-          return apiClient(originalRequest);
+        if (!accessToken) {
+          throw new Error("Refresh failed");
         }
 
-        throw new Error("Refresh failed");
+        setAccessToken(accessToken);
+        if (newRefreshToken) {
+          setRefreshToken(newRefreshToken);
+        }
+
+        window.dispatchEvent(
+          new CustomEvent("authTokenRefreshed", {
+            detail: {
+              accessToken,
+              refreshToken: newRefreshToken || refreshToken,
+            },
+          }),
+        );
+
+        processQueue(null, accessToken);
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        return apiClient(originalRequest);
       } catch (refreshError) {
+        clearAuthStorage();
+        window.dispatchEvent(new Event("authLogout"));
+        window.location.href = "/login";
         processQueue(refreshError, null);
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
+      }
+    }
+
+    if (error.response?.status === 403) {
+      if (!error.response.data?.message) {
+        error.response.data = {
+          ...error.response.data,
+          message: "You do not have permission to access this page.",
+        };
       }
     }
 

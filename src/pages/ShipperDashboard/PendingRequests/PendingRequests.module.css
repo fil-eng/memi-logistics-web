@@ -69,3 +69,14 @@
   text-align: center;
   color: var(--text-h);
 }
+
+.reviewLink {
+  display: inline-flex;
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+}

@@ -14,17 +14,8 @@ export const validateLoginForm = ({ email, password }) => {
   return errors;
 };
 
-export const validateRegisterForm = ({
-  name,
-  email,
-  password,
-  confirmPassword,
-}) => {
+export const validateRegisterForm = ({ email, password, confirmPassword }) => {
   const errors = {};
-
-  if (!name.trim()) {
-    errors.name = "Full name is required.";
-  }
 
   if (!email.trim()) {
     errors.email = "Email is required.";
@@ -41,6 +32,36 @@ export const validateRegisterForm = ({
   if (!confirmPassword) {
     errors.confirmPassword = "Confirm password is required.";
   } else if (password !== confirmPassword) {
+    errors.confirmPassword = "Passwords must match.";
+  }
+
+  return errors;
+};
+
+export const validateForgotPasswordForm = ({ email }) => {
+  const errors = {};
+
+  if (!email.trim()) {
+    errors.email = "Email is required.";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errors.email = "Enter a valid email address.";
+  }
+
+  return errors;
+};
+
+export const validateResetPasswordForm = ({ newPassword, confirmPassword }) => {
+  const errors = {};
+
+  if (!newPassword) {
+    errors.newPassword = "Password is required.";
+  } else if (newPassword.length < 8 || newPassword.length > 20) {
+    errors.newPassword = "Password must be 8-20 characters.";
+  }
+
+  if (!confirmPassword) {
+    errors.confirmPassword = "Confirm password is required.";
+  } else if (newPassword !== confirmPassword) {
     errors.confirmPassword = "Passwords must match.";
   }
 

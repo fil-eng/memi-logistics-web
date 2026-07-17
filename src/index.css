@@ -7,7 +7,7 @@
 :root {
   --text: #251ef0;
   --text-h: black;
-  --bg: #3370E9;
+  --bg: #3370e9;
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
   --accent: #aa3bff;
@@ -44,7 +44,7 @@
     --border: #2e303a;
     --code-bg: #1f2028;
     --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
+    --accent-bg: rgba(123, 49, 197, 0.15);
     --accent-border: rgba(192, 132, 252, 0.5);
     --social-bg: rgba(47, 48, 58, 0.5);
     --shadow:
@@ -102,5 +102,23 @@ a {
   text-decoration: none;
 }
 a:hover {
-  color: orange;
+  color: #04162b;
+}
+
+/* Make all buttons show pointer on hover for clear clickability */
+button{
+  /* max-width: 200px; */
+  /* margin: 3px auto; */
+}
+button,
+.btn {
+  cursor: pointer;
+}
+
+button:disabled,
+.btn[disabled] {
+  cursor: not-allowed;
+}
+.input:focus {
+  border-color: #2563eb;
 }

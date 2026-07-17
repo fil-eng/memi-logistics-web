@@ -1,0 +1,14 @@
+.empty {
+  padding: 28px;
+  text-align: center;
+  color: #666;
+  background: #fff;
+  border-radius: 10px;
+}
+.title {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.desc {
+  font-size: 0.95rem;
+}

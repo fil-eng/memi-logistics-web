@@ -1,0 +1,193 @@
+.page {
+  display: grid;
+  gap: 1rem;
+  padding: 0px 0.5rem;
+}
+
+.headerRow {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: -10px;
+}
+
+.badge {
+  display: inline-flex;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  background: var(--primary, #0b74ff);
+  color: white;
+  font-size: 0.82rem;
+  font-weight: 700;
+  width: fit-content;
+}
+
+.subtitle {
+  margin: 0;
+  color: #0c0c0c;
+}
+
+.error {
+  border: 1px solid #ff5252;
+  color: #c62828;
+  padding: 8px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.success {
+  color: #18532c;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.empty {
+  padding: 2rem;
+  text-align: center;
+  color: black;
+}
+
+.grid {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  justify-content: center;
+}
+
+.card {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: grid;
+  gap: 0.3rem;
+  width: 280px;
+  margin: 0 auto;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.21rem;
+  margin-bottom:3px;
+  text-transform: uppercase;
+}
+
+.route {
+  font-size: 0.7rem;
+  color: #285cea;
+  margin-top: 0.25rem;
+}
+
+.statusBadge {
+  display: inline-flex;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: #77a9ea;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.timeline {
+  display: grid;
+  gap: 0.2rem;
+  border-left: 2px solid #1868f3;
+  padding-left: 1rem;
+}
+
+.step {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.stepDot {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #058b09;
+  flex-shrink: 0;
+  margin-top: 0.4rem;
+  margin-left: -1.4rem;
+  align-items: center;
+}
+.stepDotPending {
+  background: red;
+}
+.stepLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin: 0;
+  text-align: start;
+}
+
+.stepState {
+  font-size: 0.6rem;
+  color: #1c6de6;
+  text-transform: uppercase;
+  margin: 0;
+  text-align: start;
+  margin-left: 10px;
+  font-weight: 600;
+  display: none;
+}
+.stepStatePending{
+  color: rgb(243, 86, 86);
+}
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.advanceButton,
+.confirmPaymentButton {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.advanceButton {
+  background: #0b74ff;
+  color: white;
+}
+
+.advanceButton:hover {
+  background: #0a5ccc;
+}
+
+.confirmPaymentButton {
+  background: #39863c;
+  color: rgb(16, 0, 0);
+}
+
+.confirmPaymentButton:hover {
+  background: #098e10;
+}
+
+.confirmPaymentButton:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+.completedNote {
+  font-size: 0.7rem;
+  color: #e84610;
+  font-style: italic;
+}
+
+.list {
+  display: grid;
+  gap: 5px;
+}
+
+.item {
+  background: #fff;
+  padding: 5px;
+  border-radius: 8px;
+}

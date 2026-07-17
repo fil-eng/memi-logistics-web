@@ -19,8 +19,8 @@
   gap: 0.5rem;
   padding: 0.5rem 0.85rem;
   border-radius: 999px;
-  background: rgb(108, 244, 181);
-  color: black;
+  background: #1E85EB;
+  color: white;
   font-size: 0.85rem;
   font-weight: 700;
 }
@@ -53,26 +53,22 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  padding: 0.95rem 1rem;
+  padding: 0.5rem 1rem;
   border-radius: 999px;
   text-decoration: none;
   font-weight: 700;
   text-align: center;
   color: black;
+  background-color: rgb(207, 201, 201);
 }
 
-.primaryButton {
-  background: rgb(240, 203, 135);
-}
-
-.secondaryButton {
-  background: rgb(136, 193, 243);
-}
-.primaryButton:hover,
-.secondaryButton:hover {
+.primaryButton:hover , .secondaryButton:hover {
+  background: #1E85EB;
   color: white;
-  background-color: rgb(40, 159, 244);
 }
+
+
+
 .section {
   display: grid;
   gap: 1rem;

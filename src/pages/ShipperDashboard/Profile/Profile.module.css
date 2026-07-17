@@ -1,21 +1,36 @@
 .page {
   display: grid;
-  gap: 1.25rem;
+  gap: 1.5rem;
+  background: transparent;
 }
 
 .card {
-  padding: 1.5rem;
-  border-radius: 24px;
-  background: white;
-  box-shadow: var(--shadow-soft);
+  display: grid;
+  gap: 1.5rem;
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sectionHeader h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.sectionHeader p {
+  margin: 0;
+  color: #475569;
 }
 
 .badge {
   display: inline-flex;
   padding: 0.35rem 0.85rem;
   border-radius: 999px;
-  background: var(--primary-soft);
-  color: var(--primary);
+  background: #e0f2fe;
+  color: #1d4ed8;
   font-size: 0.82rem;
   font-weight: 700;
 }
@@ -23,30 +38,10 @@
 h1 {
   margin: 1rem 0 0.25rem;
   font-size: 1.6rem;
-  color: var(--text-h);
-}
-
-.role {
-  margin: 0;
-  color: var(--text);
-}
-
-.details {
-  display: grid;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.details div {
-  display: flex;
-  gap: 0.5rem;
-}
-
-strong {
-  font-weight: 700;
+  color: #111827;
 }
 
 p {
   margin: 0;
-  color: var(--text);
+  color: #475569;
 }

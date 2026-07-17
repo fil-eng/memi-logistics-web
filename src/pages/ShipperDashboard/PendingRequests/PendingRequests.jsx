@@ -1,10 +1,12 @@
+import { Link } from "react-router-dom";
 import { useShipment } from "../../../state/shipments/useShipment";
+import { sortByLatestDateDesc } from "../../../utils/sortUtils";
 import styles from "./PendingRequests.module.css";
 
 const PendingRequests = () => {
   const { state } = useShipment();
-  const pending = state.shipments.filter(
-    (shipment) => shipment.status === "pending",
+  const pending = sortByLatestDateDesc(
+    state.shipments.filter((shipment) => shipment.status === "PENDING"),
   );
 
   return (
@@ -24,13 +26,21 @@ const PendingRequests = () => {
           {pending.map((shipment) => (
             <article key={shipment.id} className={styles.card}>
               <h2>shipment Type : {shipment.shipmentType}</h2>
-              <p className={styles.smallLabel}>shipper Name : {shipment.shipperName}</p>
+              <p className={styles.smallLabel}>
+                shipper Name : {shipment.shipperName}
+              </p>
               <div className={styles.details}>
                 <span>{shipment.pickupPoint}</span>
                 <span>→</span>
                 <span>{shipment.destination}</span>
               </div>
               <p className={styles.meta}>Pickup date: {shipment.date}</p>
+              <Link
+                className={styles.reviewLink}
+                to={`/shipper/review-shipment?id=${shipment.id}`}
+              >
+                Review offers
+              </Link>
             </article>
           ))}
         </div>

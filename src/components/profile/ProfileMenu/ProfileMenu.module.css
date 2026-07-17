@@ -1,0 +1,54 @@
+.menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 405;
+  min-width: 220px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.16);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 50;
+}
+
+.userBlock {
+  padding: 0.75rem 0.75rem 0.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.logoutItem {
+  color: #dc2626;
+}
+
+.logoutItem:hover {
+  background: #fee2e2;
+}
+.userName {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.15rem;
+}
+
+.userMeta {
+  font-size: 0.82rem;
+  color: #6b7280;
+}
+
+.item {
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 0.75rem;
+  border-radius: 12px;
+  color: #1d4ed8;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.item:hover {
+  background: #eff6ff;
+}

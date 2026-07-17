@@ -25,40 +25,43 @@
 
 .grid {
   display: grid;
-  gap: 1rem;
+  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  justify-content: center;
 }
 
 .card {
-  padding: 1.25rem;
-  border-radius: 24px;
   background: white;
-  box-shadow: var(--shadow-soft);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: grid;
+  gap: 0.3rem;
+  width: 280px;
+  margin: 0 auto;
+  font-size: small;
 }
-
-h2 {
-  margin: 0 0 0.25rem;
-  font-size: 1rem;
-  color: var(--text-h);
-}
-
-.smallLabel,
-.meta {
-  margin: 0;
-  color: var(--text);
-}
-
-.route {
-  margin: 0;
-  color: var(--text-h);
+.itemInfo {
+  display: flex;
+  justify-content: space-evenly;
+  font-size: medium;
+  margin-bottom: -10px;
   font-weight: 700;
+  text-transform: uppercase;
+  gap: 2px;
 }
-
 .route {
-  font-weight: 700;
+  font-size: smaller;
+}
+.route span {
+  color: rgb(5, 72, 148);
+}
+.card p {
+  color: black !important;
 }
 
 .empty {
-  padding: 1.75rem;
+  padding: 1.5rem;
   text-align: center;
   background: white;
   border-radius: 24px;

@@ -11,13 +11,18 @@ import {
   clearAuthStorage,
   setRefreshToken,
   getRefreshToken,
+  setRole,
+  getRole,
   isTokenExpired,
+  getSessionUserFromToken,
 } from "../../utils/token";
 import {
   loginUser,
   registerUser,
-  getCurrentUser,
   refreshToken as refreshTokenService,
+  logoutUser,
+  forgotPassword as forgotPasswordService,
+  resetPassword as resetPasswordService,
 } from "../../services/authService";
 
 export const AuthContext = createContext();
@@ -25,19 +30,46 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, authInitialState);
 
+  useEffect(() => {
+    const handleTokenRefreshed = (event) => {
+      const { accessToken, refreshToken } = event.detail;
+      dispatch({
+        type: types.REFRESH_TOKEN_SUCCESS,
+        payload: { accessToken, refreshToken },
+      });
+    };
+
+    const handleLogoutEvent = () => {
+      clearAuthStorage();
+      dispatch({ type: types.LOGOUT });
+      window.location.replace("/login");
+    };
+
+    window.addEventListener("authTokenRefreshed", handleTokenRefreshed);
+    window.addEventListener("authLogout", handleLogoutEvent);
+    return () => {
+      window.removeEventListener("authTokenRefreshed", handleTokenRefreshed);
+      window.removeEventListener("authLogout", handleLogoutEvent);
+    };
+  }, []);
+
   // LOGIN
   const login = async (payload) => {
     dispatch({ type: types.AUTH_START });
 
     try {
       const res = await loginUser(payload);
-      const { accessToken, refreshToken } = res;
+      const { accessToken, refreshToken, role } = res;
       setAccessToken(accessToken);
       setRefreshToken(refreshToken);
+      setRole(role || res.user?.role);
 
       dispatch({
         type: types.LOGIN_SUCCESS,
-        payload: res,
+        payload: {
+          ...res,
+          user: res.user || (role ? { role } : null),
+        },
       });
 
       return res;
@@ -56,9 +88,6 @@ export const AuthProvider = ({ children }) => {
 
     try {
       const res = await registerUser(payload);
-      const { accessToken, refreshToken } = res;
-      setAccessToken(accessToken);
-      setRefreshToken(refreshToken);
 
       dispatch({
         type: types.REGISTER_SUCCESS,
@@ -81,10 +110,13 @@ export const AuthProvider = ({ children }) => {
 
     try {
       const res = await refreshTokenService(refreshTokenValue);
-      const { accessToken, refreshToken: newRefreshToken } = res;
+      const { accessToken, refreshToken: newRefreshToken, role } = res;
       setAccessToken(accessToken);
       if (newRefreshToken) {
         setRefreshToken(newRefreshToken);
+      }
+      if (role) {
+        setRole(role);
       }
 
       dispatch({
@@ -103,90 +135,133 @@ export const AuthProvider = ({ children }) => {
   };
 
   // LOGOUT
-  const logout = () => {
-    clearAuthStorage();
-    dispatch({ type: types.LOGOUT });
+  const logout = async () => {
+    const refreshToken = getRefreshToken();
+
+    try {
+      await logoutUser(refreshToken);
+    } catch {
+      // Ignore logout errors and clear local state regardless.
+    } finally {
+      clearAuthStorage();
+      dispatch({ type: types.LOGOUT });
+      window.location.replace("/login");
+    }
+  };
+
+  // FORGOT PASSWORD
+  const forgotPassword = async (email) => {
+    dispatch({ type: types.FORGOT_PASSWORD_START });
+
+    try {
+      const res = await forgotPasswordService(email);
+
+      dispatch({
+        type: types.FORGOT_PASSWORD_SUCCESS,
+        payload: res.message || "we will send you a reset link to your email",
+      });
+
+      return res;
+    } catch (err) {
+      dispatch({
+        type: types.FORGOT_PASSWORD_ERROR,
+        payload:
+          err.response?.data?.message ||
+          "Failed to process forgot password request",
+      });
+      throw new Error(
+        err.response?.data?.message ||
+          "Failed to process forgot password request",
+      );
+    }
+  };
+
+  // RESET PASSWORD
+  const resetPassword = async (token, newPassword) => {
+    dispatch({ type: types.RESET_PASSWORD_START });
+
+    try {
+      const res = await resetPasswordService(token, newPassword);
+
+      dispatch({
+        type: types.RESET_PASSWORD_SUCCESS,
+        payload: res.message || "Password reset successfully",
+      });
+
+      return res;
+    } catch (err) {
+      dispatch({
+        type: types.RESET_PASSWORD_ERROR,
+        payload: err.response?.data?.message || "Failed to reset password",
+      });
+      throw new Error(
+        err.response?.data?.message || "Failed to reset password",
+      );
+    }
   };
 
   // RESTORE SESSION
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      dispatch({ type: types.AUTH_READY });
-    }, 2000); // 2 second timeout
-
     const restore = async () => {
       try {
         const accessToken = getAccessToken();
         const refreshToken = getRefreshToken();
+        let role = getRole();
+        const accessTokenValid = accessToken && !isTokenExpired(accessToken);
+        const hasValidSession = accessTokenValid || !!refreshToken;
 
-        if (accessToken && !isTokenExpired(accessToken)) {
-          // Access token is valid, restore session
-          try {
-            const userRes = await getCurrentUser();
-            const user = userRes;
-            dispatch({
-              type: types.SESSION_RESTORE_SUCCESS,
-              payload: {
-                user,
-                accessToken,
-                refreshToken,
-              },
-            });
-          } catch (err) {
-            // If getCurrentUser fails, try refresh
-            if (refreshToken) {
-              try {
-                const refreshRes = await refreshTokenService(refreshToken);
-                const { accessToken: newAccess, refreshToken: newRefresh } =
-                  refreshRes;
-                setAccessToken(newAccess);
-                if (newRefresh) setRefreshToken(newRefresh);
-                const userRes = await getCurrentUser();
-                const user = userRes;
-                dispatch({
-                  type: types.SESSION_RESTORE_SUCCESS,
-                  payload: {
-                    user,
-                    accessToken: newAccess,
-                    refreshToken: newRefresh || refreshToken,
-                  },
-                });
-              } catch {
-                clearAuthStorage();
-                dispatch({ type: types.LOGOUT });
-              }
-            } else {
-              clearAuthStorage();
-              dispatch({ type: types.LOGOUT });
-            }
-          }
-        } else if (refreshToken) {
-          // Access token expired or missing, use refresh token
+        if (!hasValidSession) {
+          clearAuthStorage();
+          dispatch({ type: types.AUTH_READY });
+          return;
+        }
+
+        let restoredAccessToken = accessToken;
+        let restoredRefreshToken = refreshToken;
+
+        if (!accessTokenValid && refreshToken) {
           try {
             const refreshRes = await refreshTokenService(refreshToken);
-            const { accessToken: newAccess, refreshToken: newRefresh } =
-              refreshRes;
-            setAccessToken(newAccess);
-            if (newRefresh) setRefreshToken(newRefresh);
-            const userRes = await getCurrentUser();
-            const user = userRes;
-            dispatch({
-              type: types.SESSION_RESTORE_SUCCESS,
-              payload: {
-                user,
-                accessToken: newAccess,
-                refreshToken: newRefresh || refreshToken,
-              },
-            });
+            restoredAccessToken = refreshRes.accessToken;
+            restoredRefreshToken = refreshRes.refreshToken || refreshToken;
+            if (refreshRes.role) {
+              role = refreshRes.role;
+            }
+            setAccessToken(restoredAccessToken);
+            setRefreshToken(restoredRefreshToken);
+            if (role) {
+              setRole(role);
+            }
           } catch {
             clearAuthStorage();
             dispatch({ type: types.LOGOUT });
+            return;
           }
-        } else {
-          dispatch({ type: types.AUTH_READY });
         }
+
+        const sessionUser = getSessionUserFromToken(restoredAccessToken);
+        const restoredUser = sessionUser
+          ? { ...sessionUser, role: role || sessionUser.role }
+          : role
+            ? { role }
+            : null;
+
+        if (!role && sessionUser?.role) {
+          role = sessionUser.role;
+          setRole(role);
+        }
+
+        dispatch({
+          type: types.SESSION_RESTORE_SUCCESS,
+          payload: {
+            user: restoredUser,
+            accessToken: restoredAccessToken,
+            refreshToken: restoredRefreshToken,
+            role,
+          },
+        });
       } finally {
-        clearTimeout(timeout);
+        dispatch({ type: types.AUTH_READY });
       }
     };
 
@@ -204,6 +279,8 @@ export const AuthProvider = ({ children }) => {
         register,
         refreshToken,
         logout,
+        forgotPassword,
+        resetPassword,
         dispatch,
       }}
     >

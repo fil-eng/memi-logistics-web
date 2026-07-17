@@ -1,5 +1,7 @@
 export const shipmentInitialState = {
   shipments: [],
+  offers: [],
+  notifications: [],
   selectedShipment: null,
   filters: {
     status: "all",

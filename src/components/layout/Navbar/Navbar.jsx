@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../state/auth/useAuth";
 import styles from "./Navbar.module.css";
-
-const Navbar = () => {
+import logo from "../../../assets/logo.jpg";
+const Navbar = ({ buttons }) => {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -12,42 +12,31 @@ const Navbar = () => {
   };
 
   const getDashboardRoute = () => {
-    if (user?.role === "CARRIER") return "/carrier/dashboard";
-    return "/shipper/dashboard";
+    if (user?.role === "CARRIER") return "/carrier/home";
+    return "/shipper/home";
   };
 
   return (
     <header className={styles.navbar}>
       <div className={styles.container}>
         <Link to="/" className={styles.logo}>
-          MEMI
+          <img src={logo} alt="MEMI logo" />
         </Link>
-
-        <nav className={styles.nav}>
-          {!isAuthenticated ? (
-            <>
-              {/* <Link to="/" className={styles.link}>
+        {buttons ? (
+          <nav className={styles.nav}>
+            {/* <Link to="/" className={styles.link}>
                 Home
               </Link> */}
-              <Link to="/login" className={styles.link}>
-                Login
-              </Link>
-              <Link to="/register" className={styles.primaryBtn}>
-                Register
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link to={getDashboardRoute()} className={styles.link}>
-                Dashboard
-              </Link>
-
-              <button onClick={handleLogout} className={styles.logoutBtn}>
-                Logout
-              </button>
-            </>
-          )}
-        </nav>
+            <Link to="/login" className={styles.link}>
+              Login
+            </Link>
+            <Link to="/register" className={styles.primaryBtn}>
+              Register
+            </Link>
+          </nav>
+        ) : (
+          <p className={styles.breadcrumb}>Admin Dashboard</p>
+        )}
       </div>
     </header>
   );

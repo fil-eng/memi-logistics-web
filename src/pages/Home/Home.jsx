@@ -1,29 +1,26 @@
 import { Link } from "react-router-dom";
 import styles from "./Home.module.css";
+import HeroCarousel from "../../components/homeHero/HeroCarousel/HeroCarousel";
+import HeroContent from "../../components/homeHero/HeroContent/HeroContent";
+import heroStyles from "../../components/homeHero/HomeHero.module.css";
 import Footer from "../../components/layout/Footer/Footer";
 import Navbar from "../../components/layout/Navbar/Navbar";
-
+import { ads } from "../../assets/carouselImages";
 const Home = () => {
+
+
   return (
     <>
-      <Navbar />
+      <Navbar buttons={true} />
       <div className={styles.wrapper}>
         <section className={styles.hero}>
-          <div className={styles.heroContent}>
-            <p className={styles.badge}>MEMI Logistics Platform</p>
-            <h1 className={styles.title}>A digital logistics marketplace</h1>
-            <p className={styles.subtitle}>
-              Connect shippers, carriers, and logistics partners in one trusted
-              platform that makes transport faster, clearer, and more reliable.
-            </p>
-            <div className={styles.actions}>
-              <Link className={styles.primaryBtn} to="/register">
-                Get Started
-              </Link>
-              <Link className={styles.secondaryBtn} to="/login">
-                Login
-              </Link>
-            </div>
+          <div className={heroStyles.container}>
+            <main className={heroStyles.center}>
+              <div className={heroStyles.centerInner}>
+                <HeroContent />
+                <HeroCarousel ads={ads} />
+              </div>
+            </main>
           </div>
         </section>
 

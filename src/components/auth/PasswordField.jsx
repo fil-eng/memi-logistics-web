@@ -7,6 +7,7 @@ const PasswordField = ({
   name,
   value,
   onChange,
+  onBlur,
   placeholder,
   autoComplete,
   required = true,
@@ -31,6 +32,7 @@ const PasswordField = ({
           type={showPassword ? "text" : "password"}
           value={value}
           onChange={onChange}
+          onBlur={onBlur}
           placeholder={placeholder}
           autoComplete={autoComplete}
           required={required}

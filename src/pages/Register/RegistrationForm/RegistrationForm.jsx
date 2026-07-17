@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../state/auth/useAuth";
 import { validateRegisterForm } from "../../../utils/authValidators";
+import useForm from "../../../hooks/useForm";
 import Button from "../../../components/auth/Button";
 import FormMessage from "../../../components/auth/FormMessage";
 import InputField from "../../../components/auth/InputField";
@@ -10,119 +11,108 @@ import styles from "./RegistrationForm.module.css";
 
 const RegistrationForm = ({ role }) => {
   const navigate = useNavigate();
-  const { register, state, dispatch } = useAuth();
+  const { register, state } = useAuth();
+  const [formError, setFormError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [form, setForm] = useState({
-    name: "",
+  const initialValues = {
     email: "",
     password: "",
     confirmPassword: "",
-  });
+  };
 
-  const [errors, setErrors] = useState({});
+  // Define field validation order for sequential validation
+  const fieldOrder = ["email", "password", "confirmPassword"];
+
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitted,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+  } = useForm({
+    initialValues,
+    validate: validateRegisterForm,
+    fieldOrder,
+    onSubmit: async (formValues) => {
+      setFormError(null);
+      setIsSubmitting(true);
+
+      try {
+        await register({
+          email: formValues.email,
+          password: formValues.password,
+          role,
+        });
+
+        navigate("/login", { replace: true });
+      } catch (err) {
+        setFormError(err.message || "Registration failed");
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+  });
 
   useEffect(() => {
     if (state.isAuthenticated) {
       const destination =
-        state.role === "CARRIER" ? "/carrier/dashboard" : "/shipper/dashboard";
+        state.role === "CARRIER" ? "/carrier/home" : "/shipper/home";
       navigate(destination, { replace: true });
     }
   }, [state.isAuthenticated, state.role, navigate]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    const updatedForm = { ...form, [name]: value };
-    setForm(updatedForm);
-    setErrors(validateRegisterForm({ ...updatedForm, role }));
-    if (state.errorMessage) {
-      dispatch({ type: "CLEAR_FEEDBACK" });
+  const shouldShowError = (fieldName) =>
+    (touched[fieldName] || isSubmitted) && errors[fieldName];
+
+  const handleFieldChange = (event) => {
+    if (formError) {
+      setFormError(null);
     }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const validationErrors = validateRegisterForm({ ...form, role });
-    setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length > 0) {
-      return;
-    }
-
-    try {
-      const result = await register({
-        name: form.name,
-        email: form.email,
-        password: form.password,
-        role,
-      });
-
-      const destination =
-        result?.user?.role === "CARRIER"
-          ? "/carrier/dashboard"
-          : "/shipper/dashboard";
-      navigate(destination, { replace: true });
-    } catch (err) {
-      // Error handled by provider
-    }
+    handleChange(event);
   };
 
   return (
     <form className={styles.form} onSubmit={handleSubmit} noValidate>
       <InputField
-        // label="Full Name"
-        id="name"
-        name="name"
-        type="text"
-        value={form.name}
-        onChange={handleChange}
-        placeholder="Enter your full name"
-        autoComplete="name"
-        error={errors.name}
-      />
-
-      <InputField
-        // label="Email"
         id="email"
         name="email"
         type="email"
-        value={form.email}
-        onChange={handleChange}
+        value={values.email}
+        onChange={handleFieldChange}
+        onBlur={handleBlur}
         placeholder="Enter your email"
         autoComplete="email"
-        error={errors.email}
+        error={shouldShowError("email")}
       />
 
       <PasswordField
-        // label="Password"
         id="password"
         name="password"
-        value={form.password}
-        onChange={handleChange}
+        value={values.password}
+        onChange={handleFieldChange}
+        onBlur={handleBlur}
         placeholder="Create a password"
         autoComplete="new-password"
-        error={errors.password}
+        error={shouldShowError("password")}
       />
 
       <PasswordField
-        // label="Confirm Password"
         id="confirmPassword"
         name="confirmPassword"
-        value={form.confirmPassword}
-        onChange={handleChange}
+        value={values.confirmPassword}
+        onChange={handleFieldChange}
+        onBlur={handleBlur}
         placeholder="Confirm your password"
         autoComplete="new-password"
-        error={errors.confirmPassword}
+        error={shouldShowError("confirmPassword")}
       />
 
-      {state.errorMessage && (
-        <FormMessage message={state.errorMessage} type="error" />
-      )}
+      {formError && <FormMessage message={formError} type="error" />}
 
-      <Button
-        type="submit"
-        loading={state.isLoading}
-        disabled={state.isLoading || Object.keys(errors).length > 0}
-      >
+      <Button type="submit" loading={isSubmitting}>
         Register
       </Button>
       <p className={styles.footer}>

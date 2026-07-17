@@ -1,12 +1,11 @@
 .wrapper {
   min-height: 100vh;
-  background: #3370e9;
   color: #271511;
-  background: linear-gradient( rgb(9, 115, 236), rgb(244, 247, 248));
+  background: linear-gradient(rgb(9, 115, 236), rgb(244, 247, 248));
 }
 
 .hero {
-  padding: 24px 20px 12px;
+  padding: 4px 20px 12px;
   /* background: linear-gradient(180deg, #ffffff 0%, #f5f7fb 100%); */
 }
 
@@ -20,7 +19,7 @@
   padding: 8px 12px;
   border-radius: 999px;
   background: #dbeafe;
-  color: #1d4ed8;
+  color: #1a7ced;
   font-size: 13px;
   font-weight: 700;
   margin: 0 0 16px;
@@ -123,14 +122,19 @@
   font-size: 15px;
   max-width: 680px;
 }
-
+@media (min-width: 568px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    /* max-width: 100%; */
+  }
+}
 @media (min-width: 768px) {
   .hero {
-    padding-top: 48px;
+    padding-top: 4px;
   }
 
   .title {
-    font-size: 52px;
+    font-size: 36px;
   }
 
   .subtitle {
@@ -150,5 +154,15 @@
   .ctaSection {
     padding-top: 32px;
     padding-bottom: 32px;
+  }
+}
+
+@media (min-width: 992px) {
+  .heroContent {
+    max-width: 100%;
+  }
+
+  .subtitle {
+    max-width: 760px;
   }
 }

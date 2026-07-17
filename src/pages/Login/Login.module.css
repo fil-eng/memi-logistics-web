@@ -6,16 +6,16 @@
   padding: 20px;
   /* background: #f5f7fb; */
   background: linear-gradient(rgb(8, 55, 208), rgb(31, 172, 193));
-  background: linear-gradient( rgb(9, 115, 236), rgb(244, 247, 248));
+  background: linear-gradient(rgb(9, 115, 236), rgb(244, 247, 248));
 }
 
 .card {
   width: 100%;
-  max-width: 420px;
+  max-width: 350px;
   /* background: #ffffff; */
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 15px;
-  padding: 24px;
+  padding: 20px 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   /* border: 1px solid orangered; */
 }
@@ -28,7 +28,7 @@
 }
 
 .subtitle {
-  margin: 0 0 24px;
+  margin: 10px 0;
   color: #313744;
   font-size: 14px;
   line-height: 1.5;
@@ -37,13 +37,13 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 3px;
 }
 
 .label {
@@ -54,10 +54,10 @@
 
 .input {
   width: 100%;
-  padding: 14px 16px;
+  padding: 10px 12px;
   border: 1px solid #d1d5db;
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 12px;
   outline: none;
   background: #fff;
 }
@@ -66,17 +66,17 @@
   border-color: #2563eb;
 }
 
-.button {
-  margin-top: 8px;
+.login_btn button {
   width: 100%;
-  padding: 14px 16px;
+  padding: 10px 12px;
   border: none;
   border-radius: 12px;
-  background: #2563eb;
+  background: green !important ;
   color: white;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
+  margin-top: 20px;
 }
 
 .button:disabled {
@@ -91,7 +91,7 @@
 }
 
 .footer {
-  margin-top: 20px;
+  margin-top: 5px;
   font-size: 14px;
   color: #6b7280;
   text-align: center;
@@ -102,16 +102,20 @@
   font-weight: 600;
   text-decoration: none;
 }
-
+.refersh_info {
+  font-size: x-small;
+  margin-bottom: -10px;
+  line-height: 1.5;
+}
 /* Responsive enhancements for larger screens */
 @media (min-width: 768px) {
   .wrapper {
     padding: 40px 20px;
   }
 
-  .card {
+  /* .card {
     padding: 32px;
-  }
+  } */
 
   .title {
     font-size: 32px;
@@ -122,7 +126,7 @@
   }
 
   .form {
-    gap: 20px;
+    gap: 7px;
   }
 
   .input {
@@ -141,9 +145,9 @@
 }
 
 @media (min-width: 768px) {
-  .card {
+  /* .card {
     padding: 32px;
-  }
+  } */
 
   .title {
     font-size: 32px;

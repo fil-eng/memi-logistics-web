@@ -1,0 +1,28 @@
+.bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.input,
+.select {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+.group {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.smallBtn {
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #f2f2f2;
+}
+
+@media (min-width: 720px) {
+  .bar {
+    flex-wrap: nowrap;
+  }
+}

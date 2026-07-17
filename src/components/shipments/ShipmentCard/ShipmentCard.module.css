@@ -1,0 +1,36 @@
+.card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.title {
+  font-weight: 600;
+}
+.meta {
+  color: #666;
+  font-size: 0.9rem;
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+.offerBtn {
+  background: #0b74ff;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+.small {
+  font-size: 0.85rem;
+  color: #444;
+}

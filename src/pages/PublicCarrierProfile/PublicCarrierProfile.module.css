@@ -1,0 +1,33 @@
+.page {
+  display: grid;
+  gap: 1rem;
+}
+.backButton {
+  background: transparent;
+  border: none;
+  color: var(--primary);
+  font-weight: 700;
+  cursor: pointer;
+}
+.card {
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+}
+.title {
+  margin: 0 0 0.5rem 0;
+}
+.row {
+  display: flex;
+  gap: 1rem;
+  padding: 0.4rem 0;
+}
+.label {
+  font-weight: 700;
+  color: #333;
+  min-width: 120px;
+}
+.message {
+  padding: 1rem;
+}

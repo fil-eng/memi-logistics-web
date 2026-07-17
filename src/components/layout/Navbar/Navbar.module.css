@@ -10,21 +10,19 @@
 }
 
 .container {
-  max-width: 1120px;
+  /* max-width: 1120px; */
   width: 100%;
   margin: 0 auto;
-  padding: 14px 18px;
+  padding: 4px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
 
-.logo {
-  font-weight: 800;
-  font-size: 20px;
-  color: #111827;
-  text-decoration: none;
+.logo img {
+  width: 180px;
+  height: 60px;
 }
 
 .nav {
@@ -43,13 +41,13 @@
 }
 
 .link:hover {
-  color: #111827;
+  color: #010309;
 }
 
 .primaryBtn,
 .logoutBtn {
   min-height: 44px;
-  padding: 10px 16px;
+  padding: 7px 12px;
   border-radius: 12px;
   font-size: 14px;
   font-weight: 600;
@@ -72,10 +70,17 @@
 .primaryBtn:hover {
   opacity: 0.95;
 }
-
+.breadcrumb {
+  margin: 0;
+  font-size:0.75rem;
+  color: #3370E9;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: bold;
+}
 @media (min-width: 768px) {
   .container {
-    padding: 16px 24px;
+    padding: 6px 24px;
   }
 
   .logo {
