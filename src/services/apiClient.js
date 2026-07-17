@@ -8,7 +8,7 @@ import {
   clearAuthStorage,
 } from "../utils/token";
 
-const baseURL = import.meta.env.VITE_API_URL_BASEURL;;
+const baseURL = import.meta.env.VITE_API_URL_BASEURL;
 const apiClient = axios.create({
   baseURL,
   withCredentials: true,
