@@ -1,7 +1,6 @@
 .menu {
   position: absolute;
   top: calc(100% + 0.5rem);
-  right: 405;
   min-width: 220px;
   background: white;
   border-radius: 16px;
