@@ -1,7 +1,7 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  /* background: rgba(0, 0, 0, 0.4); */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -78,7 +78,7 @@
   border-radius: 6px;
   border: 1px solid #ddd;
   font-family: inherit;
-  background-color: #fff;
+  /* background-color: #fff; */
 }
 
 .select:disabled {
