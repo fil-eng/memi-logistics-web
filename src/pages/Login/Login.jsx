@@ -55,8 +55,16 @@ const Login = () => {
                 ? "/admin/dashboard"
                 : "/";
         navigate(destination, { replace: true });
-      } catch (err) {
-        setFormError(err.message || "Login failed");
+      } catch (error) {
+        const backendMessage =
+          error?.response?.data?.message ||
+          error?.response?.data?.error ||
+          error?.message ||
+          "Something went wrong";
+
+        console.log(backendMessage); /*→ backend message */
+        console.log(error?.message); /*→ Axios/network message */
+        setFormError(backendMessage);
       } finally {
         setIsSubmitting(false);
       }
@@ -122,7 +130,12 @@ const Login = () => {
 
           {formError && <FormMessage message={formError} type="error" />}
 
-          <Button type="submit" loading={isSubmitting} disabled={isSubmitting} className={styles.login_btn}>
+          <Button
+            type="submit"
+            loading={isSubmitting}
+            disabled={isSubmitting}
+            className={styles.login_btn}
+          >
             Login
           </Button>
           <p className={styles.refersh_info}>

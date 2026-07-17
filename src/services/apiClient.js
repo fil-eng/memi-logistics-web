@@ -8,7 +8,7 @@ import {
   clearAuthStorage,
 } from "../utils/token";
 
-const baseURL = import.meta.env.VITE_API_URL_BASEURL;;
+const baseURL = import.meta.env.VITE_API_URL_BASEURL;
 const apiClient = axios.create({
   baseURL,
   withCredentials: true,
@@ -33,6 +33,11 @@ const processQueue = (error, token = null) => {
   refreshQueue = [];
 };
 
+const isAuthEndpointRequest = (url = "") =>
+  /\/auth\/(login|register|forgot-password|reset-password|logout)(\/|$)/.test(
+    url,
+  );
+
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -42,7 +47,8 @@ apiClient.interceptors.response.use(
       error.response?.status === 401 &&
       originalRequest &&
       !originalRequest._retry &&
-      !originalRequest.url.includes("/auth/refresh")
+      !originalRequest.url.includes("/auth/refresh") &&
+      !isAuthEndpointRequest(originalRequest.url)
     ) {
       originalRequest._retry = true;
 

@@ -49,7 +49,14 @@ const RegistrationForm = ({ role }) => {
 
         navigate("/login", { replace: true });
       } catch (err) {
-        setFormError(err.message || "Registration failed");
+        const backendMessage =
+          err?.response?.data?.message ||
+          err?.response?.data?.error ||
+          err?.response?.data?.msg ||
+          err?.message ||
+          "Registration failed";
+
+        setFormError(backendMessage);
       } finally {
         setIsSubmitting(false);
       }
@@ -115,7 +122,11 @@ const RegistrationForm = ({ role }) => {
       <Button type="submit" loading={isSubmitting}>
         Register
       </Button>
-      <p className={styles.footer}>
+      <p className={styles.refersh_info}>
+        Our project is hosted on a free platform, so the server may be asleep.
+        Please refresh and try again.
+      </p>
+      <p className={`${styles.footer} ${styles.login_link}`}>
         Already have an account?{" "}
         <Link className={styles.link} to="/login">
           Login

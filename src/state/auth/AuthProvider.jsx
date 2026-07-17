@@ -74,11 +74,17 @@ export const AuthProvider = ({ children }) => {
 
       return res;
     } catch (err) {
+      const errorMessage =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        err?.message ||
+        "Login failed";
+
       dispatch({
         type: types.AUTH_FAILURE,
-        payload: err.response?.data?.message || "Login failed",
+        payload: errorMessage,
       });
-      throw new Error(err.response?.data?.message || "Login failed");
+      throw new Error(errorMessage);
     }
   };
 
@@ -96,11 +102,18 @@ export const AuthProvider = ({ children }) => {
 
       return res;
     } catch (err) {
+      const errorMessage =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        err?.response?.data?.msg ||
+        err?.message ||
+        "Registration failed";
+
       dispatch({
         type: types.AUTH_FAILURE,
-        payload: err.response?.data?.message || "Registration failed",
+        payload: errorMessage,
       });
-      throw new Error(err.response?.data?.message || "Registration failed");
+      throw new Error(errorMessage);
     }
   };
 
