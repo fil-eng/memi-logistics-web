@@ -62,8 +62,8 @@ const Login = () => {
           error?.message ||
           "Something went wrong";
 
-        console.log(backendMessage); /*→ backend message */
-        console.log(error?.message); /*→ Axios/network message */
+        // console.log(backendMessage); /*→ backend message */
+        // console.log(error?.message); /*→ Axios/network message */
         setFormError(backendMessage);
       } finally {
         setIsSubmitting(false);
