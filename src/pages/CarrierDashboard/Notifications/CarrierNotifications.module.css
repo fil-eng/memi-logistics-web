@@ -1,0 +1,9 @@
+.list {
+  display: grid;
+  gap: 8px;
+}
+.note {
+  background: #fff;
+  padding: 8px;
+  border-radius: 8px;
+}

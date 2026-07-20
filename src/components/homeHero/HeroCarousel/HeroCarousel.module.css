@@ -1,0 +1,70 @@
+.carousel {
+  margin-top: 5px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.02)
+  );
+  border-radius: 6px;
+  padding: 2px 3px;
+  box-shadow: 0 8px 20px rgba(2, 6, 23, 0.12);
+  position: relative;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.carouselInner {
+  width: 100%;
+}
+
+.carouselImage {
+  width: 100%;
+  display: block;
+  border-radius: 8px;
+  height: auto;
+  object-fit: cover;
+  max-height: 220px;
+}
+
+@media (min-width: 992px) {
+  .carouselImage {
+    max-height: 360px;
+  }
+}
+
+.adLink {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.sponsoredTag {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  z-index: 3;
+}
+
+.carouselDots {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  border: none;
+}
+
+.dotActive {
+  background: #ffffff;
+}

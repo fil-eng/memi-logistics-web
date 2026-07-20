@@ -1,0 +1,24 @@
+.list {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  justify-content: center;
+}
+
+.item {
+  background: #c7d8eb;
+  padding:1rem 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: grid;
+  gap: 0.3rem;
+  width: 280px;
+  margin: 0 auto;
+  font-size: small;
+}
+.itemInfo{
+  display: flex;
+  justify-content: space-evenly;
+    font-size: medium;
+
+}

@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../state/auth/useAuth";
 import { validateLoginForm } from "../../utils/authValidators";
+import useForm from "../../hooks/useForm";
 import Button from "../../components/auth/Button";
 import FormMessage from "../../components/auth/FormMessage";
 import InputField from "../../components/auth/InputField";
@@ -9,120 +10,150 @@ import PasswordField from "../../components/auth/PasswordField";
 import styles from "./Login.module.css";
 
 const Login = () => {
-  const { login, state, dispatch } = useAuth();
+  const { login, state } = useAuth();
   const navigate = useNavigate();
+  const [formError, setFormError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [form, setForm] = useState({
+  const initialValues = {
     email: "",
     password: "",
-  });
+  };
 
-  const [errors, setErrors] = useState({});
+  // Define field validation order for sequential validation
+  const fieldOrder = ["email", "password"];
+
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitted,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+  } = useForm({
+    initialValues,
+    validate: validateLoginForm,
+    fieldOrder,
+    onSubmit: async (formValues) => {
+      setFormError(null);
+      setIsSubmitting(true);
+
+      try {
+        const result = await login({
+          email: formValues.email,
+          password: formValues.password,
+        });
+
+        const normalizedRole = result?.role?.toString().toUpperCase();
+        const destination =
+          normalizedRole === "CARRIER"
+            ? "/carrier/home"
+            : normalizedRole === "SHIPPER"
+              ? "/shipper/home"
+              : normalizedRole === "ADMIN"
+                ? "/admin/dashboard"
+                : "/";
+        navigate(destination, { replace: true });
+      } catch (error) {
+        const backendMessage =
+          error?.response?.data?.message ||
+          error?.response?.data?.error ||
+          error?.message ||
+          "Something went wrong";
+
+        // console.log(backendMessage); /*→ backend message */
+        // console.log(error?.message); /*→ Axios/network message */
+        setFormError(backendMessage);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+  });
 
   useEffect(() => {
     if (state.isAuthenticated) {
+      const normalizedRole = state.role?.toString().toUpperCase();
       const destination =
-        state.role === "CARRIER"
-          ? "/carrier/dashboard"
-          : state.role === "SHIPPER"
-            ? "/shipper/dashboard"
-            : "/";
+        normalizedRole === "CARRIER"
+          ? "/carrier/home"
+          : normalizedRole === "SHIPPER"
+            ? "/shipper/home"
+            : normalizedRole === "ADMIN"
+              ? "/admin/dashboard"
+              : "/";
       navigate(destination, { replace: true });
     }
   }, [state.isAuthenticated, state.role, navigate]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    const updatedForm = { ...form, [name]: value };
-    setForm(updatedForm);
-    setErrors(validateLoginForm(updatedForm));
-    if (state.errorMessage) {
-      dispatch({ type: "CLEAR_FEEDBACK" });
+  const shouldShowError = (fieldName) =>
+    (touched[fieldName] || isSubmitted) && errors[fieldName];
+
+  const handleFieldChange = (event) => {
+    if (formError) {
+      setFormError(null);
     }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const validationErrors = validateLoginForm(form);
-    setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length > 0) {
-      return;
-    }
-
-    try {
-      const result = await login({
-        email: form.email,
-        password: form.password,
-      });
-
-      const destination =
-        result?.user?.role === "CARRIER"
-          ? "/carrier/dashboard"
-          : result?.user?.role === "SHIPPER"
-            ? "/shipper/dashboard"
-            : "/";
-      navigate(destination, { replace: true });
-    } catch (err) {
-      // Error is handled by provider
-    }
+    handleChange(event);
   };
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.card}>
         <Link to="/">
-          {" "}
           <h1 className={styles.title}>Welcome back</h1>
         </Link>
         <p className={styles.subtitle}>Login to your MEMI logistics account.</p>
 
         <form className={styles.form} onSubmit={handleSubmit} noValidate>
           <InputField
-            // label="Email"
             id="email"
             name="email"
             type="email"
-            value={form.email}
-            onChange={handleChange}
+            value={values.email}
+            onChange={handleFieldChange}
+            onBlur={handleBlur}
             placeholder="Enter your email"
             autoComplete="email"
-            error={errors.email}
+            error={shouldShowError("email")}
           />
 
           <PasswordField
-            // label="Password"
             id="password"
             name="password"
-            value={form.password}
-            onChange={handleChange}
+            value={values.password}
+            onChange={handleFieldChange}
+            onBlur={handleBlur}
             placeholder="Enter your password"
             autoComplete="current-password"
-            error={errors.password}
+            error={shouldShowError("password")}
           />
 
-          {state.errorMessage && (
-            <FormMessage message={state.errorMessage} type="error" />
-          )}
+          {formError && <FormMessage message={formError} type="error" />}
 
           <Button
             type="submit"
-            loading={state.isLoading}
-            disabled={state.isLoading || Object.keys(errors).length > 0}
+            loading={isSubmitting}
+            disabled={isSubmitting}
+            className={styles.login_btn}
           >
             Login
           </Button>
+          <p className={styles.refersh_info}>
+            Our project is hosted on a free platform, so the server may be
+            asleep. Please refresh and try again.
+          </p>
+          <p className={styles.footer} style={{ marginTop: "12px" }}>
+            <Link className={styles.link} to="/forgot-password">
+              Forgot Password?
+            </Link>
+          </p>
         </form>
 
         <p className={styles.footer}>
           Don't have an account?{" "}
           <Link className={styles.link} to="/register">
             Register
-          </Link>{" "}
-          {/* or{" "}
-          <Link className={styles.link} to="/register/carrier">
-            Register as Carrier
-          </Link> */}
+          </Link>
         </p>
       </div>
     </div>

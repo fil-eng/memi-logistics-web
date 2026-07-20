@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="g5" x1="0" x2="1">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#7dd3fc" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" fill="url(#g5)" />
+  <g opacity="0.14">
+    <polygon points="100,500 300,120 500,480 700,80 900,420 1100,160" fill="#fff" />
+  </g>
+</svg>

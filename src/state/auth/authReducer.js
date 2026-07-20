@@ -16,10 +16,12 @@ export const authReducer = (state, action) => {
       return {
         ...state,
         isLoading: false,
-        user: action.payload.user,
+        user:
+          action.payload.user ||
+          (action.payload.role ? { role: action.payload.role } : null),
         accessToken: action.payload.accessToken,
         refreshToken: action.payload.refreshToken,
-        role: action.payload.user?.role || null,
+        role: action.payload.role || action.payload.user?.role || null,
         isAuthenticated: true,
         isInitialized: true,
         errorMessage: null,
@@ -30,14 +32,14 @@ export const authReducer = (state, action) => {
       return {
         ...state,
         isLoading: false,
-        user: action.payload.user,
-        accessToken: action.payload.accessToken,
-        refreshToken: action.payload.refreshToken,
-        role: action.payload.user?.role || null,
-        isAuthenticated: true,
+        user: null,
+        accessToken: null,
+        refreshToken: null,
+        role: null,
+        isAuthenticated: false,
         isInitialized: true,
         errorMessage: null,
-        successMessage: "Registration successful",
+        successMessage: "Registration successful. Please log in.",
       };
 
     case types.REFRESH_TOKEN_SUCCESS:
@@ -57,7 +59,7 @@ export const authReducer = (state, action) => {
         user: action.payload.user,
         accessToken: action.payload.accessToken,
         refreshToken: action.payload.refreshToken,
-        role: action.payload.user?.role || null,
+        role: action.payload.role || action.payload.user?.role || null,
         isAuthenticated: true,
         isInitialized: true,
         errorMessage: null,
@@ -103,6 +105,55 @@ export const authReducer = (state, action) => {
         ...state,
         isInitialized: true,
         isLoading: false,
+      };
+
+    case types.FORGOT_PASSWORD_START:
+      return {
+        ...state,
+        isLoading: true,
+        errorMessage: null,
+        successMessage: null,
+      };
+
+    case types.FORGOT_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        errorMessage: null,
+        successMessage:
+          action.payload || "we will send you a reset link to your email",
+      };
+
+    case types.FORGOT_PASSWORD_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        errorMessage: action.payload,
+        successMessage: null,
+      };
+
+    case types.RESET_PASSWORD_START:
+      return {
+        ...state,
+        isLoading: true,
+        errorMessage: null,
+        successMessage: null,
+      };
+
+    case types.RESET_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        errorMessage: null,
+        successMessage: action.payload || "Password reset successfully",
+      };
+
+    case types.RESET_PASSWORD_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        errorMessage: action.payload,
+        successMessage: null,
       };
 
     default:

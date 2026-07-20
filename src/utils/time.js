@@ -90,3 +90,28 @@ export const formatDate = (dateTime) => {
     return "";
   }
 };
+
+export const formatLocalDateTime = (dateTime) => {
+  if (!dateTime) return "";
+
+  try {
+    const date = new Date(dateTime);
+    if (isNaN(date.getTime())) return "";
+
+    const pad = (value) => String(value).padStart(2, "0");
+    const day = pad(date.getDate());
+    const month = pad(date.getMonth() + 1);
+    const year = date.getFullYear();
+
+    let hours = date.getHours();
+    const minutes = pad(date.getMinutes());
+    const period = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12;
+    const formattedTime = `${pad(hours)}:${minutes} ${period}`;
+
+    return `${day}-${month}-${year} at ${formattedTime}`;
+  } catch (error) {
+    console.warn("Error formatting local date/time:", error);
+    return "";
+  }
+};

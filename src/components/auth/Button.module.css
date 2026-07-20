@@ -1,6 +1,6 @@
 .button {
   width: 100%;
-  padding: 14px 16px;
+  padding: 12px 14px;
   border: none;
   border-radius: 12px;
   background: #2563eb;
@@ -9,6 +9,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease;
+  margin-top: 5px;
 }
 
 .button:hover:not(:disabled) {

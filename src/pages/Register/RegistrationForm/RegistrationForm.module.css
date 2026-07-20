@@ -3,3 +3,11 @@
   flex-direction: column;
   gap: 9px;
 }
+.refersh_info {
+  font-size: x-small;
+  margin-bottom: -10px;
+  line-height: 1.5;
+}
+.login_link{
+  margin-top: 10px;
+}

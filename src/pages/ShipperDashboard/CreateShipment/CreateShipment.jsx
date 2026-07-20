@@ -1,25 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useShipment } from "../../../state/shipments/useShipment";
-import { createShipmentRecord } from "../../../utils/shipmentStorage";
+import useForm from "../../../hooks/useForm";
 import styles from "./CreateShipment.module.css";
 
 const initialForm = {
-  shipperName: "",
   shipmentType: "",
   amount: "",
   unit: "kg",
   pickupPoint: "",
   destination: "",
   date: "",
-  safetyOption: "safe",
+  fragile: "false",
 };
 
 const validate = (values) => {
   const errors = {};
 
-  if (!values.shipperName.trim())
-    errors.shipperName = "Shipper name is required.";
   if (!values.shipmentType.trim())
     errors.shipmentType = "Shipment type is required.";
   if (!values.amount.trim() || Number(values.amount) <= 0)
@@ -34,63 +31,83 @@ const validate = (values) => {
 };
 
 const CreateShipment = () => {
-  const [form, setForm] = useState(initialForm);
-  const [errors, setErrors] = useState({});
-  const [success, setSuccess] = useState("");
-  const { addShipment } = useShipment();
+  const { createShipmentRequest } = useShipment();
   const navigate = useNavigate();
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setForm((current) => ({ ...current, [name]: value }));
-  };
-
   const timeoutRef = useRef(null);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const validation = validate(form);
-    setErrors(validation);
+  // Define field validation order for sequential validation
+  const fieldOrder = [
+    "shipmentType",
+    "amount",
+    "pickupPoint",
+    "destination",
+    "date",
+  ];
 
-    if (Object.keys(validation).length > 0) {
-      return;
-    }
-
-    const record = createShipmentRecord({
-      shipperName: form.shipperName.trim(),
-      shipmentType: form.shipmentType.trim(),
-      amount: Number(form.amount),
-      unit: form.unit,
-      pickupPoint: form.pickupPoint.trim(),
-      destination: form.destination.trim(),
-      date: form.date,
-      safetyOption: form.safetyOption,
-      status: "pending",
-    });
-
-    addShipment(record);
-    setSuccess("Shipment posted successfully.");
-    setForm(initialForm);
-    setErrors({});
+  const parseWeightKg = (value, unit) => {
+    const numeric = Number(value);
+    if (Number.isNaN(numeric) || numeric < 0) return 0;
+    if (unit === "ton") return numeric * 1000;
+    return numeric;
   };
+
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitted,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    resetForm,
+  } = useForm({
+    initialValues: initialForm,
+    validate,
+    fieldOrder,
+    onSubmit: async (formValues) => {
+      setError("");
+      try {
+        await createShipmentRequest({
+          shipmentItem: formValues.shipmentType.trim(),
+          origin: formValues.pickupPoint.trim(),
+          destination: formValues.destination.trim(),
+          weightKg: parseWeightKg(formValues.amount, formValues.unit),
+          deliveryDate: formValues.date,
+          fragile: formValues.fragile === "true",
+        });
+        setSuccess("Shipment posted successfully.");
+        resetForm();
+      } catch (err) {
+        setError(
+          err?.response?.data?.message ||
+            err.message ||
+            "Failed to create shipment.",
+        );
+      }
+    },
+  });
 
   useEffect(() => {
     if (!success) return;
 
     timeoutRef.current = window.setTimeout(() => {
-      navigate("/shipper/dashboard/active-shipments", { replace: true });
-    }, 800);
+      navigate("/shipper/active-shipments", { replace: true });
+    }, 1000);
 
     return () => {
       window.clearTimeout(timeoutRef.current);
     };
   }, [success, navigate]);
 
+  const shouldShowError = (fieldName) =>
+    (touched[fieldName] || isSubmitted) && errors[fieldName];
+
   return (
     <div className={styles.createPage}>
       <div className={styles.headerRow}>
         <div>
-          {/* <p className={styles.badge}>Create shipment</p> */}
           <h1 className={styles.title}>CREATE SHIPMENT</h1>
         </div>
       </div>
@@ -99,25 +116,17 @@ const CreateShipment = () => {
         <form className={styles.form} onSubmit={handleSubmit} noValidate>
           <div className={styles.grid}>
             <label className={styles.field}>
-              <span>Shipper name</span>
-              <input
-                name="shipperName"
-                value={form.shipperName}
-                onChange={handleChange}
-                placeholder="Your company or name"
-              />
-              {errors.shipperName && <small>{errors.shipperName}</small>}
-            </label>
-
-            <label className={styles.field}>
               <span>Shipment type</span>
               <input
                 name="shipmentType"
-                value={form.shipmentType}
+                value={values.shipmentType}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="Dry goods, electronics, fuel, etc."
               />
-              {errors.shipmentType && <small>{errors.shipmentType}</small>}
+              {shouldShowError("shipmentType") && (
+                <small>{errors.shipmentType}</small>
+              )}
             </label>
 
             <label className={styles.field}>
@@ -127,39 +136,51 @@ const CreateShipment = () => {
                   name="amount"
                   type="number"
                   min="0"
-                  value={form.amount}
+                  value={values.amount}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   placeholder="Amount"
                 />
-                <select name="unit" value={form.unit} onChange={handleChange}>
+                <select
+                  name="unit"
+                  value={values.unit}
+                  onChange={handleChange}
+                  className={styles.selectOption}
+                >
                   <option value="kg">Kg</option>
                   <option value="liter">Litter</option>
                   <option value="ton">Ton</option>
                 </select>
               </div>
-              {errors.amount && <small>{errors.amount}</small>}
+              {shouldShowError("amount") && <small>{errors.amount}</small>}
             </label>
 
             <label className={styles.field}>
               <span>Pickup point</span>
               <input
                 name="pickupPoint"
-                value={form.pickupPoint}
+                value={values.pickupPoint}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="City, port, or address"
               />
-              {errors.pickupPoint && <small>{errors.pickupPoint}</small>}
+              {shouldShowError("pickupPoint") && (
+                <small>{errors.pickupPoint}</small>
+              )}
             </label>
 
             <label className={styles.field}>
               <span>Destination</span>
               <input
                 name="destination"
-                value={form.destination}
+                value={values.destination}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 placeholder="City, port, or address"
               />
-              {errors.destination && <small>{errors.destination}</small>}
+              {shouldShowError("destination") && (
+                <small>{errors.destination}</small>
+              )}
             </label>
 
             <label className={styles.field}>
@@ -167,47 +188,51 @@ const CreateShipment = () => {
               <input
                 name="date"
                 type="date"
-                value={form.date}
+                value={values.date}
                 onChange={handleChange}
+                onBlur={handleBlur}
               />
-              {errors.date && <small>{errors.date}</small>}
+              {shouldShowError("date") && <small>{errors.date}</small>}
             </label>
 
             <div className={styles.field}>
-              <span className={styles.safe_option}>Safety option</span>
+              <span className={styles.safe_option}>Fragile</span>
               <div className={styles.optionRow}>
                 <label
                   className={`${styles.optionButton} ${
-                    form.safetyOption === "fragile" ? styles.optionSelected : ""
+                    values.fragile === "false" ? styles.optionSelected : ""
                   }`}
                 >
                   <input
                     type="radio"
-                    name="safetyOption"
-                    value="fragile"
-                    checked={form.safetyOption === "fragile"}
+                    name="fragile"
+                    value="false"
+                    checked={values.fragile === "false"}
                     onChange={handleChange}
                   />
                   Normal
                 </label>
                 <label
                   className={`${styles.optionButton} ${
-                    form.safetyOption === "safe" ? styles.optionSelected_Fragile : ""
+                    values.fragile === "true"
+                      ? styles.optionSelected_Fragile
+                      : ""
                   }`}
                 >
                   <input
                     type="radio"
-                    name="safetyOption"
-                    value="safe"
-                    checked={form.safetyOption === "safe"}
-                    onChange={handleChange} 
+                    name="fragile"
+                    value="true"
+                    checked={values.fragile === "true"}
+                    onChange={handleChange}
                   />
-                 Fragile
+                  Fragile
                 </label>
               </div>
             </div>
           </div>
 
+          {error && <p className={styles.error}>{error}</p>}
           {success && <p className={styles.success}>{success}</p>}
 
           <button className={styles.submitButton} type="submit">

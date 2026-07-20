@@ -1,0 +1,106 @@
+.accountPage {
+  display: grid;
+  gap: 1rem;
+  padding: 0.3rem 0;
+  background: #f8fafc;
+  border-radius: 8px;
+  margin-top: -15px;
+}
+
+.topbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.breadcrumb {
+  margin: 0 0 0.25rem;
+  color: #3b82f6;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  color: #111827;
+}
+
+.subtitle {
+  margin: 0.5rem 0 0;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.statusMessage {
+  padding: 0 3rem;
+  color: #f77f5d;
+  text-align: center;
+}
+
+.panelGrid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.sidebar {
+  background: white;
+  border-radius: 24px;
+  padding: 1rem;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+}
+
+.logoutLink {
+  color: #b91c1c;
+}
+
+.logoutLink:hover {
+  background: #fee2e2;
+}
+
+.navList {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.navItem {
+  width: 100%;
+}
+
+.navLink {
+  display: block;
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  color: #374151;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.navLink:hover {
+  background: #eef2ff;
+}
+
+.navLinkActive {
+  background: #e0f2fe;
+  color: #075985;
+}
+
+.mainContent {
+  background: white;
+  border-radius: 24px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+}
+
+@media (min-width: 900px) {
+  .panelGrid {
+    grid-template-columns: 260px 1fr;
+  }
+}

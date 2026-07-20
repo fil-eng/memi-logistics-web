@@ -1,10 +1,3 @@
-const CarrierDashboard = () => {
-  return (
-    <div>
-      <h1>Carrier Dashboard</h1>
-      <p>View available loads, manage trips, and track delivery performance.</p>
-    </div>
-  );
-};
+import CarrierLayout from "./Layout/CarrierLayout";
 
-export default CarrierDashboard;
+export default CarrierLayout;

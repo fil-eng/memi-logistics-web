@@ -1,43 +1,44 @@
+import { useCallback } from "react";
 import { useShipment } from "../../../state/shipments/useShipment";
-import { formatRelativeTime } from "../../../utils/time";
-import styles from "./Notifications.module.css";
+import { useAuth } from "../../../state/auth/useAuth";
+import NotificationList from "../../../components/notifications/NotificationList";
 
 const Notifications = () => {
-  const { state } = useShipment();
-  const notifications = state.shipments
+  const {
+    state,
+    markNotificationRead,
+    markNotificationUnread,
+    deleteNotification,
+    clearNotifications,
+  } = useShipment();
+  const auth = useAuth();
+  const userId = auth.user?.id || auth.user?.shipperId;
+
+  const notifications = (state.notifications || [])
+    .filter((note) => !note.userId || String(note.userId) === String(userId))
     .slice()
-    .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
-    .map((shipment) => ({
-      id: shipment.id,
-      title: `Shipment ${shipment.shipmentType} ${shipment.status === "delivered" ? "delivered" : shipment.status === "pending" ? "is pending" : "updated"}`,
-      details: `${shipment.pickupPoint} → ${shipment.destination}`,
-      time: formatRelativeTime(shipment.updatedAt),
-    }));
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  const handleToggleRead = useCallback(
+    (id, isRead) => {
+      if (isRead) {
+        markNotificationUnread(id);
+      } else {
+        markNotificationRead(id);
+      }
+    },
+    [markNotificationRead, markNotificationUnread],
+  );
 
   return (
-    <div className={styles.page}>
-      <div className={styles.headerRow}>
-        <p className={styles.badge}>Notifications</p>
-        <h1>Recent shipment updates</h1>
-        <p className={styles.subtitle}>
-          Notifications are based on the latest client-side shipment activity.
-        </p>
-      </div>
-
-      {notifications.length === 0 ? (
-        <div className={styles.empty}>No notifications yet.</div>
-      ) : (
-        <div className={styles.list}>
-          {notifications.map((item) => (
-            <article key={item.id} className={styles.card}>
-              <h2>{item.title}</h2>
-              <p>{item.details}</p>
-              <time>{item.time}</time>
-            </article>
-          ))}
-        </div>
-      )}
-    </div>
+    <NotificationList
+      notifications={notifications}
+      onToggleRead={handleToggleRead}
+      onDelete={deleteNotification}
+      onClearAll={clearNotifications}
+      pageLabel="Notifications"
+      subtitle="Persistent shipment notifications for your shipper account."
+    />
   );
 };
 

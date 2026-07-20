@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1">
+      <stop offset="0%" stop-color="#f97316" />
+      <stop offset="100%" stop-color="#fb7185" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" fill="url(#g1)" />
+  <g opacity="0.12">
+    <circle cx="200" cy="120" r="120" fill="#fff" />
+    <circle cx="1000" cy="480" r="200" fill="#fff" />
+  </g>
+</svg>

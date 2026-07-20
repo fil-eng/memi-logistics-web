@@ -3,7 +3,7 @@
   gap: 0.5rem;
   /* background-color: red; */
   margin-top: -20px;
-  
+  justify-content: center;
 }
 
 .headerRow {
@@ -51,9 +51,8 @@
   gap: 0.65rem;
   font-size: 0.94rem;
   color: var(--text-h);
-  
 }
-.safe_option{
+.safe_option {
   text-align: start;
 }
 .field span {
@@ -88,27 +87,31 @@
   grid-template-columns: 1fr 120px;
   gap: 0.75rem;
 }
-
+.selectOption{
+  padding-right: 10px;
+  background-color: red;
+  justify-content: center;
+}
+label span {
+  text-align: start;
+}
 .optionRow {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.75rem;
-  max-width:250px;
-  /* margin: 0 auto; */
+  max-width: 250px;
   justify-content: center;
   align-items: center;
 }
-label span{
-  text-align: start;
-}
+
 .optionButton {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   min-height: 36px;
   gap: 0.5rem;
   border: 1px solid #c8d2e0;
-  border-radius: 16px;
+  border-radius: 10px;
   background: #c0c4bc;
   color: var(--text-h);
   cursor: pointer;
@@ -118,12 +121,15 @@ label span{
     border-color 0.2s ease,
     color 0.2s ease;
   position: relative;
+  
 }
 
 .optionButton input {
-  position: absolute;
+  /* position: absolute; */
   opacity: 0;
-  pointer-events: none;
+  /* pointer-events: none; */
+  width: 20%;
+  display: none;
 }
 
 .optionSelected {
@@ -132,7 +138,7 @@ label span{
   color: white;
 }
 
-.optionSelected_Fragile{
+.optionSelected_Fragile {
   background-color: red;
 }
 small {
@@ -143,14 +149,14 @@ small {
   padding: 1rem;
   border-radius: 18px;
   background: var(--success-soft);
-  color: var(--success);
+  color: rgb(17, 220, 78);
   font-weight: 700;
   margin: 0;
 }
 
 .submitButton {
   /* width: 30%; */
-  padding: .5rem 1.15rem;
+  padding: 0.5rem 1.15rem;
   border: none;
   border-radius: 999px;
   background: rgb(51, 120, 231);
